@@ -18,46 +18,57 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 st.markdown(
     """
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        /* App background */
+        .stApp {
             background-color: #f9fafb;
             color: #0f172a;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            color: #0f172a;
-            font-weight: 700; /* BOLD */
-        }
-        .stApp {
-            background-color: #ffffff;
             padding: 2rem;
         }
+
+        /* Main heading (st.title) */
+        .stApp h1 {
+            color: #0f172a;
+            font-weight: 800; /* Very bold */
+            font-size: 2.5rem;
+        }
+
+        /* Sub-headings */
+        h2, h3, h4, h5, h6 {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        /* Labels (Username, Password, etc) */
         .stTextInput label, .stPasswordInput label, .stSelectbox label, .stRadio label {
             color: #0f172a;
-            font-weight: 600; /* Semi-bold for labels */
+            font-weight: 600;
+            font-size: 1rem;
         }
+
+        /* Buttons */
         .stButton>button {
             background-color: #3b82f6;
             color: white;
             border-radius: 8px;
             padding: 0.5rem 1rem;
-            font-weight: 600; /* Semi-bold */
+            font-weight: 600;
             border: none;
+            font-size: 1rem;
         }
         .stButton>button:hover {
             background-color: #2563eb;
         }
-        /* Optional: Tabs */
+
+        /* Tabs */
         .stTabs [data-baseweb="tab"] {
             font-weight: 600;
             color: #0f172a;
+            font-size: 1rem;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
-
-           
-         
 
 # Database setup
 def init_db():
