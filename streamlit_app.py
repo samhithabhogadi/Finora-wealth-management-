@@ -9,6 +9,10 @@ import os
 import openai
 from openai import OpenAI
 
+# First Streamlit command must be this one:
+st.set_page_config(page_title="FINORA - Student Budget Manager", page_icon="💰", layout="wide")
+
+
 client = "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"
 
 def ask_ai_advisor(balance_left, categories_used):
