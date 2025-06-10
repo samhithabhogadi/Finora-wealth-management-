@@ -21,62 +21,43 @@ st.markdown(
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f9fafb;
-            color: #0f172a; /* DARK font color */
+            color: #0f172a;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #0f172a;
+            font-weight: 700; /* BOLD */
         }
         .stApp {
             background-color: #ffffff;
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
-        .block-container {
-            max-width: 1200px;
-            margin: auto;
-        }
-        .sidebar .sidebar-content {
-            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-            color: white;
-            border-radius: 10px;
+        .stTextInput label, .stPasswordInput label, .stSelectbox label, .stRadio label {
+            color: #0f172a;
+            font-weight: 600; /* Semi-bold for labels */
         }
         .stButton>button {
             background-color: #3b82f6;
             color: white;
             border-radius: 8px;
             padding: 0.5rem 1rem;
-            font-weight: 500;
+            font-weight: 600; /* Semi-bold */
             border: none;
         }
         .stButton>button:hover {
             background-color: #2563eb;
         }
-        .section {
-            border-left: 5px solid #22c55e;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background: #f0fdf4;
-            border-radius: 8px;
-            color: #0f172a; /* DARK font inside section */
-        }
-        .scrollbox {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 1rem;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            color: #0f172a; /* DARK font */
-        }
-        .metric-card {
-            background: #ffffff;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            color: #0f172a; /* DARK font */
+        /* Optional: Tabs */
+        .stTabs [data-baseweb="tab"] {
+            font-weight: 600;
+            color: #0f172a;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+           
+         
 
 # Database setup
 def init_db():
