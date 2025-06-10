@@ -21,7 +21,7 @@ st.markdown(
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f9fafb;
-            color: #1e293b;
+            color: #0f172a; /* DARK font color */
         }
         .stApp {
             background-color: #ffffff;
@@ -55,6 +55,7 @@ st.markdown(
             margin-bottom: 1.5rem;
             background: #f0fdf4;
             border-radius: 8px;
+            color: #0f172a; /* DARK font inside section */
         }
         .scrollbox {
             overflow-x: auto;
@@ -63,12 +64,14 @@ st.markdown(
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
+            color: #0f172a; /* DARK font */
         }
         .metric-card {
             background: #ffffff;
             padding: 1rem;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            color: #0f172a; /* DARK font */
         }
     </style>
     """,
