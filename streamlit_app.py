@@ -15,68 +15,78 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
+
 st.markdown("""
     <style>
-    /* GLOBAL BACKGROUND & FONTS */
-    .stApp {
-        background-color: #f9fafc;
-        color: #111111;
-        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    /* Page background */
+    body {
+        background-color: #f9fafc !important;
     }
 
-    /* HEADINGS */
+    /* All headings */
     h1, h2, h3, h4, h5, h6 {
-        color: #111111 !important;
-        font-weight: 700 !important;
-    }
-
-    /* TABS (Login/Register) */
-    /* The current class Streamlit uses is .stTabs */
-    .stTabs [data-baseweb="tab"] {
-        background-color: #f1f4f8;
-        color: #222222;
-        font-weight: 600;
-        border-radius: 8px;
-        margin-right: 6px;
-        padding: 8px 16px;
-        border: 1px solid #d3dce6;
-    }
-
-    .stTabs [aria-selected="true"] {
-        background-color: #e3eaf2 !important;
-        color: #111111 !important;
-        font-weight: 700 !important;
-        border: 1px solid #c3cdd6 !important;
-    }
-
-    /* INPUT TEXTBOXES */
-    input[type="text"], input[type="password"] {
-        background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
         color: #222222 !important;
-        border: 1px solid #cbd3db !important;
-        border-radius: 8px !important;
-        padding: 10px 14px !important;
-        font-weight: 500 !important;
     }
 
-div.stButton > button {
-    background-color: #f5f7fa !important; /* very light */
-    color: #222222 !important; /* dark font */
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 10px 20px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-}
+    /* Paragraph text */
+    .stMarkdown p {
+        color: #333333 !important;
+    }
 
-div.stButton > button:hover {
-    background-color: #e9eff5 !important; /* subtle hover */
-    color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-}
+    /* Tabs buttons (Login/Register) */
+    button[role="tab"] {
+        background-color: #f5f7fa !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e2 !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+        margin-right: 5px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    button[role="tab"]:hover {
+        background-color: #e9eff5 !important;
+    }
+
+    /* Main Login button */
+    div.stButton > button {
+        background-color: #f5f7fa !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e2 !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    div.stButton > button:hover {
+        background-color: #e9eff5 !important;
+        color: #111111 !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Input fields */
+    .stTextInput > div > div > input {
+        background-color: #ffffff !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e2 !important;
+        border-radius: 6px !important;
+    }
+
+    /* Password field */
+    .stTextInput > div > div > div > input {
+        background-color: #ffffff !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e2 !important;
+        border-radius: 6px !important;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
 # Database setup
