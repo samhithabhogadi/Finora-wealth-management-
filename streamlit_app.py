@@ -59,23 +59,22 @@ st.markdown("""
         font-weight: 500 !important;
     }
 
-   div.stButton > button {
-    background: linear-gradient(180deg, #f9fbfd 0%, #ffffff 100%) !important;
+ div.stButton > button {
+    background: #f5f7fa !important;
     color: #222222 !important;
     border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
-    padding: 10px 20px !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-    transition: background 0.2s ease, box-shadow 0.2s ease !important;
-    width: auto !important;  /* Do not stretch full width */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    padding: 10px 20px !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 div.stButton > button:hover {
-    background: linear-gradient(180deg, #ecf2f9 0%, #f9fbfd 100%) !important;
+    background: #e9eff5 !important;
     color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
 
