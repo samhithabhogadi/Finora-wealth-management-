@@ -21,7 +21,7 @@ if 'page_flow' not in st.session_state:
 st.title("💰 FINORA - Student Budget Manager")
 
 # Sidebar Navigation
-st.sidebar.title("Navigation (Auto flow enabled)")
+st.sidebar.title("Navigation )
 current_page = st.sidebar.radio("You are currently at", ["Register", "Login", "FINORA App", "About"], index=["Register", "Login", "FINORA App", "About"].index(st.session_state['page_flow']))
 
 # Auto Navigation
