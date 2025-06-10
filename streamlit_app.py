@@ -56,21 +56,22 @@ st.markdown(
             font-weight: 500;
         }
 
-       /* Buttons */
+      /* Light tone button */
 .stButton>button {
-    background-color: #3b82f6; /* primary blue */
-    color: white;
+    background: linear-gradient(180deg, #e8f0fe 0%, #ffffff 100%);
+    color: #333333; /* dark font */
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     font-weight: 600;
-    border: none; /* remove red border */
+    border: 1px solid #d0d7de; /* very soft border */
     font-size: 1rem;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* optional: subtle shadow */
-    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* very subtle shadow */
+    transition: background 0.2s ease;
 }
 
 .stButton>button:hover {
-    background-color: #2563eb; /* darker on hover */
+    background: linear-gradient(180deg, #dce6fc 0%, #f6faff 100%);
+    color: #111111; /* slight dark on hover */
 }
 
         /* Tabs */
