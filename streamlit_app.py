@@ -1,161 +1,170 @@
-# streamlit_app.py
+# finora_app.py
 
 import streamlit as st
 import pandas as pd
 import altair as alt
 from datetime import date
 
-# Initialize session state
+# --- Initialize session state ---
 if 'users' not in st.session_state:
     st.session_state['users'] = {}
 if 'logged_in_user' not in st.session_state:
     st.session_state['logged_in_user'] = None
-if 'pocket_money' not in st.session_state:
-    st.session_state['pocket_money'] = 0.0
-if 'expense_data' not in st.session_state:
-    st.session_state['expense_data'] = []
-if 'page_flow' not in st.session_state:
-    st.session_state['page_flow'] = "Register"
+if 'expenses' not in st.session_state:
+    st.session_state['expenses'] = []
 
-# App Title
-st.title("💰 FINORA - Student Budget Manager")
+# --- Helper functions ---
+def login(username, password):
+    user = st.session_state['users'].get(username)
+    if user and user['password'] == password:
+        st.session_state['logged_in_user'] = username
+        return True
+    return False
 
-# Sidebar Navigation (disabled control — shows current page only)
-st.sidebar.title("Navigation")
-st.sidebar.markdown(f"Current Page: **{st.session_state['page_flow']}**")
+def register(username, name, email, password):
+    if username in st.session_state['users']:
+        return False
+    st.session_state['users'][username] = {
+        'name': name,
+        'email': email,
+        'password': password
+    }
+    return True
 
-# Handle pages
-page = st.session_state['page_flow']
+# --- Styling ---
+st.markdown("""
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #222;
+        background-color: #fafafa;
+    }
+    .main {
+        background-color: #fafafa;
+        color: #222;
+    }
+    h1, h2, h3 {
+        font-weight: bold;
+        color: #222;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# Page 1 - Registration
-if page == "Register":
-    st.header("Register New Account")
+# --- App Title ---
+st.title("💸 FINORA - Student Budget Manager")
 
-    reg_name = st.text_input("Name")
-    reg_email = st.text_input("Email")
-    reg_username = st.text_input("Username")
-    reg_password = st.text_input("Password", type="password")
+# --- Auth flow ---
+if st.session_state['logged_in_user'] is None:
 
-    if st.button("Register"):
-        if reg_username in st.session_state['users']:
-            st.error("Username already exists! Try another.")
-        else:
-            st.session_state['users'][reg_username] = {
-                'name': reg_name,
-                'email': reg_email,
-                'password': reg_password
-            }
-            st.success("Registration successful!")
-            if st.button("Go to Login"):
-                st.session_state['page_flow'] = "Login"
+    auth_choice = st.sidebar.radio("Login / Register", ["Login", "Register"])
 
-# Page 2 - Login
-elif page == "Login":
-    st.header("Login to FINORA")
+    if auth_choice == "Login":
+        st.header("🔑 Login")
+        login_username = st.text_input("Username")
+        login_password = st.text_input("Password", type="password")
 
-    login_username = st.text_input("Username")
-    login_password = st.text_input("Password", type="password")
-
-    if st.button("Login"):
-        user_data = st.session_state['users'].get(login_username)
-        if user_data and user_data['password'] == login_password:
-            st.session_state['logged_in_user'] = login_username
-            st.success(f"Welcome, {user_data['name']}!")
-            if st.button("Enter App"):
-                st.session_state['page_flow'] = "FINORA App"
-        else:
-            st.error("Invalid login.")
-
-# Page 3 - Main App
-elif page == "FINORA App":
-    if st.session_state['logged_in_user'] is None:
-        st.warning("Please log in first.")
-        st.session_state['page_flow'] = "Login"
-    else:
-        logged_user = st.session_state['logged_in_user']
-        name = st.session_state['users'][logged_user]['name']
-
-        st.header(f"Welcome, {name}! 🎓")
-
-        subpage = st.radio("Choose Action", ["Set Pocket Money", "Add Expenses", "View Summary & Graphs", "Logout"])
-
-        if subpage == "Set Pocket Money":
-            pm = st.number_input("Enter Monthly Pocket Money (₹)", min_value=0.0, format="%.2f")
-            if st.button("Save Pocket Money"):
-                st.session_state['pocket_money'] = pm
-                st.success("Pocket money saved.")
-
-        elif subpage == "Add Expenses":
-            desc = st.text_input("Description")
-            amt = st.number_input("Amount (₹)", min_value=0.0, format="%.2f")
-            cat = st.selectbox("Category", ["Food", "Transport", "Education", "Entertainment", "Others"])
-            dt = st.date_input("Date", value=date.today())
-
-            if st.button("Add Expense"):
-                st.session_state['expense_data'].append({
-                    'description': desc,
-                    'amount': amt,
-                    'category': cat,
-                    'date': dt
-                })
-                st.success("Expense added.")
-
-        elif subpage == "View Summary & Graphs":
-            st.subheader("Pocket Money Summary")
-
-            total_spent = sum([e['amount'] for e in st.session_state['expense_data']])
-            balance = st.session_state['pocket_money'] - total_spent
-
-            st.metric("Total Pocket Money", f"₹{st.session_state['pocket_money']:.2f}")
-            st.metric("Total Spent", f"₹{total_spent:.2f}")
-            st.metric("Balance Left", f"₹{balance:.2f}")
-
-            if st.session_state['expense_data']:
-                df = pd.DataFrame(st.session_state['expense_data'])
-                st.dataframe(df)
-
-                # Pie Chart
-                cat_df = df.groupby("category")["amount"].sum().reset_index()
-                pie = alt.Chart(cat_df).mark_arc(innerRadius=50).encode(
-                    theta="amount:Q",
-                    color="category:N",
-                    tooltip=["category", "amount"]
-                ).properties(width=400, height=400)
-                st.altair_chart(pie)
-
-                # Line Chart
-                time_df = df.groupby("date")["amount"].sum().reset_index()
-                line = alt.Chart(time_df).mark_line(point=True).encode(
-                    x="date:T",
-                    y="amount:Q",
-                    tooltip=["date", "amount"]
-                ).properties(width=600, height=300)
-                st.altair_chart(line)
+        if st.button("Login"):
+            if login(login_username, login_password):
+                st.success(f"Welcome {st.session_state['users'][login_username]['name']}! You are logged in.")
             else:
-                st.info("No expenses yet.")
+                st.error("Invalid username or password.")
 
-        elif subpage == "Logout":
-            st.session_state['logged_in_user'] = None
-            st.session_state['page_flow'] = "Login"
-            st.success("Logged out. Click below to go to login.")
-            if st.button("Go to Login"):
-                pass
+    elif auth_choice == "Register":
+        st.header("📝 Register")
+        reg_name = st.text_input("Name")
+        reg_email = st.text_input("Email")
+        reg_username = st.text_input("Username")
+        reg_password = st.text_input("Password", type="password")
 
-# Page 4 - About
-elif page == "About":
-    st.header("Key Features of FINORA")
-    st.markdown("""
-    **FINORA** is a modern student budgeting app designed for simplicity and financial awareness.
+        if st.button("Register"):
+            if register(reg_username, reg_name, reg_email, reg_password):
+                st.success("Registration successful! You can now login.")
+            else:
+                st.error("Username already exists. Please choose another.")
+else:
+    # --- Dashboard Layout ---
+    st.sidebar.header("Navigation")
+    nav_choice = st.sidebar.radio("Go to", ["🏠 Dashboard", "➕ Add Expense", "📊 Analytics", "🚪 Logout"])
 
-    ### 🔑 Features:
-    - Student-first interface for tracking monthly income and expenses.
-    - Clean visual insights via pie & line charts.
-    - Mobile-ready, light theme, easy-to-use experience.
-    - Data stays local (session only) for security and privacy.
+    username = st.session_state['logged_in_user']
+    name = st.session_state['users'][username]['name']
 
-    Start your financial journey with FINORA.
-    """)
+    if nav_choice == "🏠 Dashboard":
+        st.header(f"Welcome {name} 👋")
+        st.subheader("Your Financial Summary")
 
-# Footer
+        total_expenses = sum([exp['amount'] for exp in st.session_state['expenses'] if exp['username'] == username])
+        st.metric(label="Total Expenses", value=f"₹{total_expenses:.2f}")
+
+        st.write("---")
+        st.write("Latest Expenses")
+        user_expenses = [exp for exp in st.session_state['expenses'] if exp['username'] == username]
+        if user_expenses:
+            df_exp = pd.DataFrame(user_expenses)
+            df_exp['date'] = pd.to_datetime(df_exp['date'])
+            df_exp = df_exp.sort_values(by='date', ascending=False)
+            st.dataframe(df_exp[['date', 'category', 'description', 'amount']].head(10))
+        else:
+            st.info("No expenses recorded yet.")
+
+    elif nav_choice == "➕ Add Expense":
+        st.header("➕ Add New Expense")
+
+        exp_desc = st.text_input("Description")
+        exp_amt = st.number_input("Amount (₹)", min_value=0.0, format="%.2f")
+        exp_cat = st.selectbox("Category", ["Food", "Transport", "Entertainment", "Education", "Others"])
+        exp_date = st.date_input("Date", value=date.today())
+
+        if st.button("Add Expense"):
+            st.session_state['expenses'].append({
+                'username': username,
+                'description': exp_desc,
+                'amount': exp_amt,
+                'category': exp_cat,
+                'date': exp_date
+            })
+            st.success("Expense added successfully.")
+
+    elif nav_choice == "📊 Analytics":
+        st.header("📊 Expense Analytics")
+
+        user_expenses = [exp for exp in st.session_state['expenses'] if exp['username'] == username]
+
+        if user_expenses:
+            df_exp = pd.DataFrame(user_expenses)
+            df_exp['date'] = pd.to_datetime(df_exp['date'])
+
+            # Expenses over time
+            st.subheader("Expenses Over Time")
+            time_df = df_exp.groupby('date')['amount'].sum().reset_index()
+
+            line_chart = alt.Chart(time_df).mark_line(point=True).encode(
+                x='date:T',
+                y='amount:Q',
+                tooltip=['date', 'amount']
+            ).properties(width=700, height=400)
+
+            st.altair_chart(line_chart)
+
+            # Expenses by category
+            st.subheader("Expenses by Category")
+            cat_df = df_exp.groupby('category')['amount'].sum().reset_index()
+
+            pie_chart = alt.Chart(cat_df).mark_arc(innerRadius=50).encode(
+                theta=alt.Theta(field='amount', type='quantitative'),
+                color=alt.Color(field='category', type='nominal'),
+                tooltip=['category', 'amount']
+            ).properties(width=400, height=400)
+
+            st.altair_chart(pie_chart)
+
+        else:
+            st.info("No expenses to analyze yet.")
+
+    elif nav_choice == "🚪 Logout":
+        st.session_state['logged_in_user'] = None
+        st.success("You have been logged out.")
+
+# --- Footer ---
 st.markdown("---")
-st.markdown("© 2025 FINORA | Built for students, by students.", unsafe_allow_html=True)
+st.markdown("© 2025 FINORA Student Budget Manager App. All rights reserved.", unsafe_allow_html=True)
