@@ -104,17 +104,36 @@ st.markdown("""
         color: #222222 !important;
     }
 
-    /* Sidebar (if used) */
-    section[data-testid="stSidebar"] {
-        background-color: #f5f7fa !important;
-        color: #222222 !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
+  /* Sidebar background */
+section[data-testid="stSidebar"] {
+    background-color: #f9fafc !important;
+    color: #222222 !important;
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 16px;
+}
 
-    /* Sidebar headings */
-    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {
-        color: #111111 !important;
-    }
+/* Sidebar headings */
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] h4,
+section[data-testid="stSidebar"] h5,
+section[data-testid="stSidebar"] h6 {
+    color: #111111 !important;
+}
+
+/* Sidebar labels */
+section[data-testid="stSidebar"] label {
+    color: #222222 !important;
+    font-weight: 600 !important;
+}
+
+/* Sidebar text */
+section[data-testid="stSidebar"] div,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] p {
+    color: #222222 !important;
+}
     </style>
 """, unsafe_allow_html=True)
 
