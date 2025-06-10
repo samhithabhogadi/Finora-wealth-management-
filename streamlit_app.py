@@ -15,65 +15,141 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
-st.markdown(
-    """
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f7fa;
-            color: #1e2a44;
-        }
-        .stApp {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        .block-container {
-            max-width: 1200px;
-            margin: auto;
-        }
-        .sidebar .sidebar-content {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            border-radius: 10px;
-        }
-        .stButton>button {
-            background-color: #3b82f6;
-            color: white;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-        }
-        .stButton>button:hover {
-            background-color: #2563eb;
-        }
-        .section {
-            border-left: 5px solid #22c55e;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background: #f0fdf4;
-            border-radius: 8px;
-        }
-        .scrollbox {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 1rem;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-        }
-        .metric-card {
-            background: #ffffff;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+/* Updated CSS for a bold and attractive Finora Wealth Management App */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a2e; /* Deep navy background for a bold look */
+    color: #e0e0e0; /* Light grey text for contrast */
+}
 
+.stApp {
+    background: linear-gradient(180deg, #16213e 0%, #0f3460 100%); /* Gradient from dark navy to deep blue */
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+    max-width: 1400px;
+    margin: auto;
+}
+
+.block-container {
+    max-width: 1300px;
+    margin: auto;
+}
+
+.sidebar .sidebar-content {
+    background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); /* Vibrant purple gradient */
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.stButton>button {
+    background-color: #facc15; /* Bold gold for buttons */
+    color: #1a1a2e; /* Dark navy text for contrast */
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.stButton>button:hover {
+    background-color: #eab308; /* Darker gold on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.section {
+    border-left: 6px solid #22d3ee; /* Bright cyan border for sections */
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    background: #2a2a4a; /* Darker blue section background */
+    border-radius: 10px;
+    color: #e0e0e0;
+}
+
+.scrollbox {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 1.5rem;
+    background: #1e1e3a; /* Slightly lighter dark blue for scrollbox */
+    border: 1px solid #4b5e7e;
+    border-radius: 10px;
+}
+
+.metric-card {
+    background: #2a2a4a; /* Matching section background */
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    color: #e0e0e0;
+    border: 1px solid #4b5e7e;
+}
+
+/* Enhance form inputs for a bolder look */
+.stTextInput>input, .stDateInput>input, .stNumberInput>input, .stSelectbox>div {
+    background-color: #1e1e3a;
+    color: #e0e0e0;
+    border: 1px solid #4b5e7e;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.stSelectbox>div:hover, .stTextInput>input:hover, .stNumberInput>input:hover {
+    border-color: #22d3ee; /* Cyan border on hover */
+}
+
+/* Dataframe styling for consistency */
+.stDataFrame table {
+    background-color: #1e1e3a;
+    color: #e0e0e0;
+    border: 1px solid #4b5e7e;
+}
+
+.stDataFrame th {
+    background-color: #6b21a8; /* Purple for headers */
+    color: #ffffff;
+}
+
+.stDataFrame td {
+    border: 1px solid #4b5e7e;
+}
+
+/* Progress bar styling */
+.stProgress > div > div {
+    background-color: #facc15; /* Gold progress bar */
+}
+
+.stProgress > div {
+    background-color: #4b5e7e; /* Grey background for progress bar */
+}
+
+/* Plotly chart text and background */
+.plotly-graph-div {
+    background-color: #1e1e3a !important;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.plotly .modebar {
+    background-color: #2a2a4a !important;
+}
+
+.plotly .modebar-btn {
+    color: #e0e0e0 !important;
+}
+
+.plotly .modebar-btn:hover {
+    color: #facc15 !important;
+}
+
+/* Title and header styling */
+h1, h2, h3, h4, h5, h6 {
+    color: #22d3ee; /* Bright cyan for headers */
+    font-weight: 700;
+}
+         
 # Database setup
 def init_db():
     conn = sqlite3.connect('finora.db')
