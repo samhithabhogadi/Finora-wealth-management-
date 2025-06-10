@@ -2,18 +2,23 @@
 
 import streamlit as st
 import pandas as pd
-import openai
 import altair as alt
 from datetime import date, datetime
 import pickle
 import os
+import openai
+from openai import OpenAI
 
-openai.api_key = "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"
+client = "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"
+
 response = client.chat.completions.create(
     model="gpt-4o",
-    messages=[ ... ],
+    messages=[
+        {"role": "system", "content": "You are a financial advisor helping students invest their leftover pocket money."},
+        {"role": "user", "content": f"I have ₹{balance_left} left. My recent spending categories are {categories_used}. Please give me 2-3 simple suggestions on what I can do with this leftover money."}
+    ],
     max_tokens=300
-    )
+)
 # ----------------- Helper Functions -----------------
 
 # Load or initialize user database
