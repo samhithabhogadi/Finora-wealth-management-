@@ -15,120 +15,143 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
+
+
+/* General app styling */
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f9fafb;
+    background-color: #f7f9fc;
     color: #2d3748;
+    margin: 0;
+    padding: 0;
 }
 
+/* Main app container */
 .stApp {
     background: linear-gradient(180deg, #ffffff 0%, #e6f0fa 100%);
-    padding: 2.5rem;
+    padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     max-width: 1400px;
-    margin: auto;
+    margin: 2rem auto;
 }
 
+/* Center content */
 .block-container {
-    max-width: 1300px;
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* Sidebar styling */
 .sidebar .sidebar-content {
-    background: linear-gradient(135deg, #a5b4fc 0%, #7dd3fc 100%);
+    background: linear-gradient(135deg, #a5b4fc 0%, #60a5fa 100%);
     color: #1f2937;
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Buttons */
 .stButton>button {
-    background-color: #f472b6;
+    background-color: #3b82f6;
     color: #ffffff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 0.75rem 1.5rem;
-    font-weight: 600;
+    font-weight: 500;
     border: none;
     transition: all 0.3s ease;
 }
 
 .stButton>button:hover {
-    background-color: #ec4899;
+    background-color: #2563eb;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Custom section */
 .section {
-    border-left: 6px solid #34d399;
+    border-left: 5px solid #10b981;
     padding: 1.5rem;
-    margin-bottom: 2rem;
-    background: #f0fdfa;
-    border-radius: 10px;
-    color: #2d3748;
-}
-
-.scrollbox {
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 1.5rem;
-    background: #f8fafc;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-}
-
-.metric-card {
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    color: #2d3748;
-    border: 1px solid #e5e7eb;
-}
-
-.stTextInput>input, .stDateInput>input, .stNumberInput>input, .stSelectbox>div {
-    background-color: #f8fafc;
-    color: #2d3748;
-    border: 1px solid #d1d5db;
+    margin-bottom: 1.5rem;
+    background: #ecfdf5;
     border-radius: 8px;
-    padding: 0.5rem;
-}
-
-.stSelectbox>div:hover, .stTextInput>input:hover, .stNumberInput>input:hover {
-    border-color: #34d399;
-}
-
-.stDataFrame table {
-    background-color: #f8fafc;
-    color: #2d3748;
-    border: 1px solid #d1d5db;
-}
-
-.stDataFrame th {
-    background-color: #a5b4fc;
     color: #1f2937;
 }
 
-.stDataFrame td {
-    border: 1px solid #d1d5db;
+/* Scrollbox for horizontal scrolling */
+.scrollbox {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
 }
 
+/* Metric card */
+.metric-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    color: #1f2937;
+}
+
+/* Input fields */
+.stTextInput>input, .stDateInput>input, .stNumberInput>input, .stSelectbox>div {
+    background-color: #ffffff;
+    color: #2d3748;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.75rem;
+    transition: border-color 0.2s ease;
+}
+
+.stTextInput>input:hover, .stDateInput>input:hover, .stNumberInput>input:hover, .stSelectbox>div:hover {
+    border-color: #10b981;
+}
+
+/* DataFrame styling */
+.stDataFrame table {
+    background-color: #ffffff;
+    color: #2d3748;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.stDataFrame th {
+    background-color: #dbeafe;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.stDataFrame td {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem;
+}
+
+/* Progress bar */
 .stProgress > div > div {
-    background-color: #f472b6;
+    background-color: #3b82f6;
 }
 
 .stProgress > div {
     background-color: #e5e7eb;
+    border-radius: 6px;
 }
 
+/* Plotly charts */
 .plotly-graph-div {
-    background-color: #f8fafc !important;
-    border-radius: 10px;
+    background-color: #ffffff !important;
+    border-radius: 8px;
     padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .plotly .modebar {
     background-color: #ffffff !important;
+    border-radius: 6px;
 }
 
 .plotly .modebar-btn {
@@ -136,16 +159,15 @@ body {
 }
 
 .plotly .modebar-btn:hover {
-    color: #f472b6 !important;
+    color: #3b82f6 !important;
 }
 
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
     color: #1e40af;
     font-weight: 700;
+    margin-bottom: 1rem;
 }
-
-   
-         
 # Database setup
 def init_db():
     conn = sqlite3.connect('finora.db')
