@@ -1,4 +1,4 @@
-# finora_budget_manager_final.py
+# streamlit_app.py
 
 import streamlit as st
 import pandas as pd
@@ -20,11 +20,12 @@ if 'page_flow' not in st.session_state:
 # App Title
 st.title("💰 FINORA - Student Budget Manager")
 
-# Sidebar Navigation
-st.sidebar.title("Navigation")
-current_page = st.sidebar.radio("You are currently at", ["Register", "Login", "FINORA App", "About"], index=["Register", "Login", "FINORA App", "About"].index(st.session_state['page_flow']))
+# Sidebar Navigation (show current page only, flow is auto-controlled)
+st.sidebar.title("Navigation (Auto flow enabled)")
+current_page = st.sidebar.radio("You are currently at", ["Register", "Login", "FINORA App", "About"],
+                                index=["Register", "Login", "FINORA App", "About"].index(st.session_state['page_flow']))
 
-# Auto Navigation
+# Page Control
 page = st.session_state['page_flow']
 
 # Registration Page
