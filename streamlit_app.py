@@ -17,9 +17,9 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 # Custom CSS for professional styling
 st.markdown("""
 <style>
-/* General page background */
+/* General page background (light tone) */
 body {
-    background-color: #f9fafc !important;
+    background-color: #fefefe !important;
     color: #222222 !important;
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
 }
@@ -36,9 +36,9 @@ p, span, div, label, li, a {
     font-size: 16px !important;
 }
 
-/* Sidebar */
+/* Sidebar (light tone) */
 section[data-testid="stSidebar"] {
-    background-color: #f9fafc !important;
+    background-color: #fefefe !important;
 }
 
 section[data-testid="stSidebar"] h1,
@@ -53,11 +53,11 @@ section[data-testid="stSidebar"] label {
     font-weight: 600 !important;
 }
 
-/* Login/Register tabs */
+/* Login/Register tabs (light background, dark font) */
 button[role="tab"] {
     background-color: #f5f7fa !important;
     color: #111111 !important;
-    border: 1px solid #ccd6e2 !important;
+    border: 1px solid #d1d5db !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
@@ -68,15 +68,15 @@ button[role="tab"] {
 }
 
 button[role="tab"]:hover {
-    background-color: #e9eff5 !important;
+    background-color: #e5e7eb !important;
     color: #111111 !important;
 }
 
-/* Buttons (Login, Register, Submit, etc.) */
+/* Buttons (Login, Register, Submit, etc.) (light background, dark font) */
 div.stButton > button {
     background-color: #f5f7fa !important;
     color: #111111 !important;
-    border: 1px solid #ccd6e2 !important;
+    border: 1px solid #d1d5db !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
@@ -87,16 +87,16 @@ div.stButton > button {
 }
 
 div.stButton > button:hover {
-    background-color: #e9eff5 !important;
+    background-color: #e5e7eb !important;
     color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
 }
 
-/* Input fields (Text, Number, Password, Selectbox) */
+/* Input fields (Text, Number, Password, Selectbox) (light background) */
 input, textarea, div[data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
+    border: 1px solid #d1d5db !important;
     border-radius: 6px !important;
     padding: 8px !important;
     font-size: 15px !important;
@@ -108,10 +108,10 @@ input, textarea, div[data-baseweb="select"] > div {
     color: #222222 !important;
     border-radius: 8px !important;
     padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
 }
 
-/* DataFrame */
+/* DataFrame (light background) */
 .stDataFrame {
     background-color: #ffffff !important;
     color: #222222 !important;
