@@ -5,4 +5,10 @@ cd finora-app
 pip install -r requirements.txt
 streamlit run app.py
 pip install -r requirements.txt
-base = "light"
+
+base="light"
+primaryColor="#222222"
+backgroundColor="#f9f9f9"
+secondaryBackgroundColor="#ffffff"
+textColor="#222222"
+font="sans serif"
