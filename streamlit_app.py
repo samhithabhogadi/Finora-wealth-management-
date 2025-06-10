@@ -73,14 +73,23 @@ st.markdown(
         /* Tabs */
         .stTabs [data-baseweb="tab"] {
             font-weight: 600;
-            color: #0f172a;
+            color: #64748b; /* lighter gray */
             font-size: 1rem;
+        }
+
+        /* Selected Tab */
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {
+            color: #3b82f6; /* primary blue */
+            font-weight: 700;
+            border-bottom: 2px solid #3b82f6;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
-
+  
+      
+  
 
 # Database setup
 def init_db():
