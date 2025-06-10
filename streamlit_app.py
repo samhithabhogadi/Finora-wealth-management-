@@ -17,6 +17,7 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 # Custom CSS for professional styling
 st.markdown("""
 <style>
+
 /* General page background */
 body {
     background-color: #f9fafc !important;
@@ -30,17 +31,16 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700 !important;
 }
 
-/* Paragraph text */
-.stMarkdown p, p, span, div {
+/* Paragraph text and general text */
+p, span, div, label, li, a {
     color: #222222 !important;
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
     background-color: #f9fafc !important;
     color: #222222 !important;
-    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
 }
 
 section[data-testid="stSidebar"] h1,
@@ -56,7 +56,7 @@ section[data-testid="stSidebar"] label {
     font-weight: 600 !important;
 }
 
-/* Tabs buttons (Login/Register) */
+/* Tabs buttons (Login/Register tabs) */
 button[role="tab"] {
     background-color: #f5f7fa !important;
     color: #222222 !important;
@@ -75,7 +75,7 @@ button[role="tab"]:hover {
     color: #111111 !important;
 }
 
-/* All buttons */
+/* Main buttons (Login/Register/Submit/Any click buttons) */
 div.stButton > button {
     background-color: #f5f7fa !important;
     color: #222222 !important;
@@ -95,7 +95,7 @@ div.stButton > button:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
-/* Input fields (Text, Number, Password) */
+/* Input fields (Text, Number, Password, Selectbox) */
 input, textarea {
     background-color: #ffffff !important;
     color: #222222 !important;
@@ -105,10 +105,11 @@ input, textarea {
     font-size: 15px !important;
 }
 
-/* Select box */
-.stSelectbox > div {
+/* Selectbox */
+div[data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
     border-radius: 6px !important;
 }
 
@@ -122,17 +123,7 @@ input, textarea {
     font-weight: 600 !important;
 }
 
-/* Scrollbox for transactions */
-.scrollbox {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    overflow-x: auto !important;
-}
-
-/* Forms sections */
+/* Forms */
 .stForm {
     background-color: #ffffff !important;
     color: #222222 !important;
@@ -141,20 +132,20 @@ input, textarea {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
-/* Dataframe */
+/* DataFrame */
 .stDataFrame {
     background-color: #ffffff !important;
     color: #222222 !important;
 }
 
-/* Titles in main content */
+/* Main title (st.title) */
 .stTitle {
     color: #111111 !important;
     font-weight: 700 !important;
 }
+
 </style>
 """, unsafe_allow_html=True)
-
 
 # Database setup
 def init_db():
