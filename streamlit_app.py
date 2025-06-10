@@ -17,10 +17,10 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 # Custom CSS for professional styling
 st.markdown("""
     <style>
-    /* Set page background */
+    /* Page background */
     html, body, .stApp {
-        background-color: #f9fafc !important; /* Light background */
-        color: #222222 !important; /* Default font color */
+        background-color: #f9fafc !important;
+        color: #222222 !important;
         font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
         font-size: 16px;
         line-height: 1.6;
@@ -28,23 +28,30 @@ st.markdown("""
 
     /* All headings */
     h1, h2, h3, h4, h5, h6 {
-        color: #111111 !important; /* Darker for headings */
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+        color: #111111 !important;
     }
 
-    /* Paragraph text and general text */
+    /* General text */
     .stMarkdown p, .stMarkdown span, .stMarkdown div {
         color: #222222 !important;
     }
 
-    /* Labels for inputs */
+    /* Labels */
     label {
         color: #222222 !important;
         font-weight: 600 !important;
     }
 
-    /* Tabs buttons (Login/Register) */
-    button[role="tab"] {
+    /* Input fields */
+    input {
+        background-color: #ffffff !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e2 !important;
+        border-radius: 6px !important;
+    }
+
+    /* Tabs container */
+    div[data-testid="stTabs"] div[role="tab"] {
         background-color: #f5f7fa !important;
         color: #222222 !important;
         border: 1px solid #ccd6e2 !important;
@@ -57,12 +64,12 @@ st.markdown("""
         transition: all 0.2s ease-in-out !important;
     }
 
-    button[role="tab"]:hover {
+    div[data-testid="stTabs"] div[role="tab"]:hover {
         background-color: #e9eff5 !important;
     }
 
-    /* Main button (Login/Register) */
-    div.stButton > button {
+    /* Main button */
+    div[data-testid="stButton"] button {
         background-color: #f5f7fa !important;
         color: #222222 !important;
         border: 1px solid #ccd6e2 !important;
@@ -75,49 +82,23 @@ st.markdown("""
         transition: all 0.2s ease-in-out !important;
     }
 
-    div.stButton > button:hover {
+    div[data-testid="stButton"] button:hover {
         background-color: #e9eff5 !important;
         color: #111111 !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
     }
 
-    /* Input fields */
-    .stTextInput > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
-
-    /* Password field */
-    .stTextInput > div > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
-
-    /* Checkbox / radio / selectbox label text */
-    .stCheckbox > label, .stRadio > label, .stSelectbox > label {
-        color: #222222 !important;
-    }
-
-    /* Sidebar (if used) */
+    /* Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #f5f7fa !important;
         color: #222222 !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
     }
 
-    /* Sidebar headings */
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {
         color: #111111 !important;
     }
     </style>
 """, unsafe_allow_html=True)
-
  
 # Database setup
 def init_db():
