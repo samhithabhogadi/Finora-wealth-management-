@@ -56,19 +56,22 @@ st.markdown(
             font-weight: 500;
         }
 
-        /* Buttons */
-        .stButton>button {
-            background-color: #3b82f6;
-            color: white;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            border: none;
-            font-size: 1rem;
-        }
-        .stButton>button:hover {
-            background-color: #2563eb;
-        }
+       /* Buttons */
+.stButton>button {
+    background-color: #3b82f6; /* primary blue */
+    color: white;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border: none; /* remove red border */
+    font-size: 1rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* optional: subtle shadow */
+    transition: background-color 0.2s ease;
+}
+
+.stButton>button:hover {
+    background-color: #2563eb; /* darker on hover */
+}
 
         /* Tabs */
         .stTabs [data-baseweb="tab"] {
