@@ -1,4 +1,4 @@
-# finora_budget_manager_auto_flow.py
+# finora_budget_manager_final.py
 
 import streamlit as st
 import pandas as pd
@@ -47,6 +47,7 @@ if page == "Register":
             }
             st.success(f"User {reg_username} registered successfully! Moving to Login...")
             st.session_state['page_flow'] = "Login"
+            st.experimental_rerun()
 
 # Login Page
 elif page == "Login":
@@ -61,6 +62,7 @@ elif page == "Login":
             st.session_state['logged_in_user'] = login_username
             st.success(f"Welcome, {user_data['name']}! Redirecting to FINORA App...")
             st.session_state['page_flow'] = "FINORA App"
+            st.experimental_rerun()
         else:
             st.error("Invalid username or password.")
 
@@ -69,6 +71,7 @@ elif page == "FINORA App":
     if st.session_state['logged_in_user'] is None:
         st.warning("Please log in to access the FINORA app.")
         st.session_state['page_flow'] = "Login"
+        st.experimental_rerun()
     else:
         logged_in_username = st.session_state['logged_in_user']
         logged_in_name = st.session_state['users'][logged_in_username]['name']
@@ -150,6 +153,7 @@ elif page == "FINORA App":
             st.session_state['logged_in_user'] = None
             st.session_state['page_flow'] = "Login"
             st.success("You have been logged out.")
+            st.experimental_rerun()
 
 # About Page
 elif page == "About":
