@@ -15,17 +15,19 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
+import streamlit as st
+
 st.markdown("""
 <style>
-/* General page background (light tone) */
-body {
+/* Ensure light background for the entire app */
+.stApp {
     background-color: #fefefe !important;
     color: #222222 !important;
-    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
 }
 
 /* All headings (h1 to h6, including main title) */
-h1, h2, h3, h4, h5, h6, .stTitle {
+h1, h2, h3, h4, h5, h6, [data-testid="stHeader"] {
     color: #111111 !important;
     font-weight: 700 !important;
 }
@@ -36,25 +38,25 @@ p, span, div, label, li, a {
     font-size: 16px !important;
 }
 
-/* Sidebar (light tone) */
-section[data-testid="stSidebar"] {
+/* Sidebar */
+[data-testid="stSidebar"] {
     background-color: #fefefe !important;
 }
 
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3,
-section[data-testid="stSidebar"] h4,
-section[data-testid="stSidebar"] h5,
-section[data-testid="stSidebar"] h6,
-section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] label {
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] h4,
+[data-testid="stSidebar"] h5,
+[data-testid="stSidebar"] h6,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label {
     color: #111111 !important;
     font-weight: 600 !important;
 }
 
-/* Login/Register tabs (light background, dark font) */
-button[role="tab"] {
+/* Login/Register tabs */
+button[data-testid="stTab"] {
     background-color: #f5f7fa !important;
     color: #111111 !important;
     border: 1px solid #d1d5db !important;
@@ -67,13 +69,13 @@ button[role="tab"] {
     transition: all 0.2s ease-in-out !important;
 }
 
-button[role="tab"]:hover {
+button[data-testid="stTab"]:hover {
     background-color: #e5e7eb !important;
     color: #111111 !important;
 }
 
-/* Buttons (Login, Register, Submit, etc.) (light background, dark font) */
-div.stButton > button {
+/* Buttons (Login, Register, Submit, etc.) */
+button[kind="primary"], button[kind="secondary"] {
     background-color: #f5f7fa !important;
     color: #111111 !important;
     border: 1px solid #d1d5db !important;
@@ -86,14 +88,14 @@ div.stButton > button {
     transition: all 0.2s ease-in-out !important;
 }
 
-div.stButton > button:hover {
+button[kind="primary"]:hover, button[kind="secondary"]:hover {
     background-color: #e5e7eb !important;
     color: #111111 !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
 }
 
-/* Input fields (Text, Number, Password, Selectbox) (light background) */
-input, textarea, div[data-baseweb="select"] > div {
+/* Input fields (Text, Number, Password, Selectbox) */
+input, textarea, [data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #222222 !important;
     border: 1px solid #d1d5db !important;
@@ -102,8 +104,8 @@ input, textarea, div[data-baseweb="select"] > div {
     font-size: 15px !important;
 }
 
-/* Metric cards and forms (light-tone boxes) */
-.metric-card, .stForm {
+/* Metric cards and forms */
+div[data-testid="stMetric"], div[data-testid="stForm"] {
     background-color: #ffffff !important;
     color: #222222 !important;
     border-radius: 8px !important;
@@ -111,14 +113,13 @@ input, textarea, div[data-baseweb="select"] > div {
     box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
 }
 
-/* DataFrame (light background) */
-.stDataFrame {
+/* DataFrame */
+div[data-testid="stDataFrame"] {
     background-color: #ffffff !important;
     color: #222222 !important;
 }
 </style>
 """, unsafe_allow_html=True)
-
 # Database setup
 def init_db():
     conn = sqlite3.connect('finora.db')
