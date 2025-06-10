@@ -17,7 +17,6 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 # Custom CSS for professional styling
 st.markdown("""
 <style>
-
 /* General page background */
 body {
     background-color: #f9fafc !important;
@@ -25,13 +24,13 @@ body {
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
 }
 
-/* All headings */
-h1, h2, h3, h4, h5, h6 {
+/* All headings (h1 to h6, including main title) */
+h1, h2, h3, h4, h5, h6, .stTitle {
     color: #111111 !important;
     font-weight: 700 !important;
 }
 
-/* Paragraph text and general text */
+/* General text (paragraphs, labels, etc.) */
 p, span, div, label, li, a {
     color: #222222 !important;
     font-size: 16px !important;
@@ -40,7 +39,6 @@ p, span, div, label, li, a {
 /* Sidebar */
 section[data-testid="stSidebar"] {
     background-color: #f9fafc !important;
-    color: #222222 !important;
 }
 
 section[data-testid="stSidebar"] h1,
@@ -50,16 +48,15 @@ section[data-testid="stSidebar"] h4,
 section[data-testid="stSidebar"] h5,
 section[data-testid="stSidebar"] h6,
 section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] label {
     color: #111111 !important;
     font-weight: 600 !important;
 }
 
-/* Tabs buttons (Login/Register tabs) */
+/* Login/Register tabs */
 button[role="tab"] {
     background-color: #f5f7fa !important;
-    color: #222222 !important;
+    color: #111111 !important;
     border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
@@ -75,10 +72,10 @@ button[role="tab"]:hover {
     color: #111111 !important;
 }
 
-/* Main buttons (Login/Register/Submit/Any click buttons) */
+/* Buttons (Login, Register, Submit, etc.) */
 div.stButton > button {
     background-color: #f5f7fa !important;
-    color: #222222 !important;
+    color: #111111 !important;
     border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
@@ -96,7 +93,7 @@ div.stButton > button:hover {
 }
 
 /* Input fields (Text, Number, Password, Selectbox) */
-input, textarea {
+input, textarea, div[data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #222222 !important;
     border: 1px solid #ccd6e2 !important;
@@ -105,26 +102,8 @@ input, textarea {
     font-size: 15px !important;
 }
 
-/* Selectbox */
-div[data-baseweb="select"] > div {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 6px !important;
-}
-
-/* Metric cards */
-.metric-card {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-    font-weight: 600 !important;
-}
-
-/* Forms */
-.stForm {
+/* Metric cards and forms (light-tone boxes) */
+.metric-card, .stForm {
     background-color: #ffffff !important;
     color: #222222 !important;
     border-radius: 8px !important;
@@ -137,13 +116,6 @@ div[data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #222222 !important;
 }
-
-/* Main title (st.title) */
-.stTitle {
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
