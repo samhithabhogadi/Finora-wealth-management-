@@ -5,3 +5,4 @@ cd finora-app
 pip install -r requirements.txt
 streamlit run app.py
 pip install -r requirements.txt
+base = "light"
