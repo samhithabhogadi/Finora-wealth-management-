@@ -75,18 +75,21 @@ st.markdown(
 }
 
         /* Tabs */
-        .stTabs [data-baseweb="tab"] {
-            font-weight: 600;
-            color: #64748b; /* lighter gray */
-            font-size: 1rem;
-        }
+div[role="tablist"] > div[role="tab"] {
+    background-color: #f5f7fa !important; /* light tone */
+    color: #333333 !important;            /* dark font */
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    margin-right: 5px !important;
+    padding: 0.5rem 1rem !important;
+}
 
-        /* Selected Tab */
-        .stTabs [data-baseweb="tab"][aria-selected="true"] {
-            color: #3b82f6; /* primary blue */
-            font-weight: 700;
-            border-bottom: 2px solid #3b82f6;
-        }
+div[role="tablist"] > div[role="tab"][aria-selected="true"] {
+    background-color: #e0ebf8 !important; /* slightly highlighted tab */
+    color: #111111 !important;
+    font-weight: 700 !important;
+}
+
     </style>
     """,
     unsafe_allow_html=True
