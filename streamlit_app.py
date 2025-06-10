@@ -59,24 +59,24 @@ st.markdown("""
         font-weight: 500 !important;
     }
 
- div.stButton > button {
-        background: #f5f7fa !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-        padding: 10px 20px !important;
-        transition: all 0.2s ease-in-out !important;
-    }
+div.stButton > button {
+    background-color: #f5f7fa !important; /* very light */
+    color: #222222 !important; /* dark font */
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: 10px 20px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
 
-    div.stButton > button:hover {
-        background: #e9eff5 !important;
-        color: #111111 !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-    }
-    </style>
+div.stButton > button:hover {
+    background-color: #e9eff5 !important; /* subtle hover */
+    color: #111111 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
 """, unsafe_allow_html=True)
 
 # Database setup
