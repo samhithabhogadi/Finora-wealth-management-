@@ -15,126 +15,79 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
-import streamlit as st
-
-# Inject CSS for light tone & dark font
-import streamlit as st
-
-# Inject CSS for light tone & dark font
 st.markdown("""
     <style>
-    /* Page background */
-    body {
-        background-color: #f9fafc !important;
+    /* GLOBAL BACKGROUND & FONTS */
+    .stApp {
+        background-color: #f9fafc;
+        color: #111111;
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     }
 
-    /* All headings */
+    /* HEADINGS */
     h1, h2, h3, h4, h5, h6 {
-        color: #222222 !important;
-    }
-
-    /* Paragraph text */
-    .stMarkdown p {
-        color: #333333 !important;
-    }
-
-    /* Tabs buttons (Login/Register) */
-    button[role="tab"] {
-        background-color: #f5f7fa !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        padding: 10px 20px !important;
-        margin-right: 5px !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-
-    button[role="tab"]:hover {
-        background-color: #e9eff5 !important;
-    }
-
-    /* Main Login button */
-    div.stButton > button {
-        background-color: #f5f7fa !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        padding: 10px 20px !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-
-    div.stButton > button:hover {
-        background-color: #e9eff5 !important;
         color: #111111 !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+        font-weight: 700 !important;
     }
 
-    /* Input fields */
-    .stTextInput > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
+    /* TABS (Login/Register) */
+    /* The current class Streamlit uses is .stTabs */
+    .stTabs [data-baseweb="tab"] {
+        background-color: #f1f4f8;
+        color: #222222;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-right: 6px;
+        padding: 8px 16px;
+        border: 1px solid #d3dce6;
     }
 
-    /* Password field */
-    .stTextInput > div > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
+    .stTabs [aria-selected="true"] {
+        background-color: #e3eaf2 !important;
+        color: #111111 !important;
+        font-weight: 700 !important;
+        border: 1px solid #c3cdd6 !important;
     }
+
+    /* INPUT TEXTBOXES */
+    input[type="text"], input[type="password"] {
+        background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
+        color: #222222 !important;
+        border: 1px solid #cbd3db !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        font-weight: 500 !important;
+    }
+
+    /* BUTTONS */
+    .stButton>button {
+        background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%) !important;
+        color: #222222 !important;
+        border-radius: 8px !important;
+        padding: 10px 20px !important;
+        font-weight: 600 !important;
+        border: 1px solid #ccd6e2 !important;
+        font-size: 1rem !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+        transition: background 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .stButton>button:hover {
+        background: linear-gradient(180deg, #ecf2f9 0%, #f9fbfd 100%) !important;
+        color: #111111 !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* PASSWORD EYE BUTTON */
+    button[kind="icon"] {
+        background: #f0f4f8 !important;
+        color: #222222 !important;
+        border: 1px solid #cbd3db !important;
+        border-radius: 8px !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
-
-# App content
-st.markdown("<h1>🔒 Finora: Login or Register</h1>", unsafe_allow_html=True)
-
-# Tabs for Login/Register
-tabs = st.tabs(["Login", "Register"])
-
-# Login Tab
-with tabs[0]:
-    st.text_input("Username", key="login_username")
-    st.text_input("Password", type="password", key="login_password")
-    st.button("Login")
-
-# Register Tab
-with tabs[1]:
-    st.text_input("Full Name", key="register_fullname")
-    st.text_input("Email", key="register_email")
-    st.text_input("Username", key="register_username")
-    st.text_input("Password", type="password", key="register_password")
-    st.button("Register")
-
-
-# App content
-st.markdown("<h1>🔒 Finora: Login or Register</h1>", unsafe_allow_html=True)
-
-# Tabs for Login/Register
-tabs = st.tabs(["Login", "Register"])
-
-# Login Tab
-with tabs[0]:
-    st.text_input("Username")
-    st.text_input("Password", type="password")
-    st.button("Login")
-
-# Register Tab
-with tabs[1]:
-    st.text_input("Full Name")
-    st.text_input("Email")
-    st.text_input("Username")
-    st.text_input("Password", type="password")
-    st.button("Register")
-
 
 # Database setup
 def init_db():
