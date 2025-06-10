@@ -60,32 +60,22 @@ st.markdown("""
     }
 
  div.stButton > button {
-    background: #f5f7fa !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    padding: 10px 20px !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-div.stButton > button:hover {
-    background: #e9eff5 !important;
-    color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-}
-
-
-    /* PASSWORD EYE BUTTON */
-    button[kind="icon"] {
-        background: #f0f4f8 !important;
+        background: #f5f7fa !important;
         color: #222222 !important;
-        border: 1px solid #cbd3db !important;
+        border: 1px solid #ccd6e2 !important;
         border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+        padding: 10px 20px !important;
+        transition: all 0.2s ease-in-out !important;
     }
 
+    div.stButton > button:hover {
+        background: #e9eff5 !important;
+        color: #111111 !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
