@@ -18,15 +18,14 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 st.markdown("""
     <style>
 
-    /* GENERAL BODY */
+    /* PAGE BACKGROUND + FONT */
     body, .stApp {
         background-color: #f9fafc !important;
         color: #111111 !important;
         font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
-        font-weight: 500 !important;
     }
 
-    /* MAIN HEADING */
+    /* HEADINGS */
     h1, h2, h3, h4, h5, h6 {
         color: #111111 !important;
         font-weight: 700 !important;
@@ -34,54 +33,58 @@ st.markdown("""
 
     /* TABS (Login/Register) */
     div[role="tablist"] > div[role="tab"] {
-        background-color: #f0f4f8 !important;
+        background-color: #f1f4f8 !important;
         color: #222222 !important;
         font-weight: 600 !important;
         border-radius: 8px !important;
         margin-right: 6px !important;
-        padding: 0.6rem 1.2rem !important;
-        border: 1px solid #d5dce2 !important;
+        padding: 0.5rem 1rem !important;
+        border: 1px solid #d3dce6 !important;
+        transition: background 0.3s ease !important;
     }
 
     div[role="tablist"] > div[role="tab"][aria-selected="true"] {
-        background-color: #e6edf5 !important;
+        background-color: #e3eaf2 !important;
         color: #111111 !important;
         font-weight: 700 !important;
-        border: 1px solid #c5cfd8 !important;
+        border: 1px solid #c3cdd6 !important;
     }
 
-    /* TEXT INPUT BOXES */
+    /* TEXT INPUTS */
     .stTextInput > div > div > input {
         background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%) !important;
         color: #222222 !important;
-        border: 1px solid #ccd6e0 !important;
+        border: 1px solid #cbd3db !important;
         border-radius: 8px !important;
         padding: 0.7rem 1rem !important;
         font-weight: 500 !important;
     }
 
+    /* PASSWORD WIDGET (eye button) */
+    .stTextInput > div > div > div > button {
+        background: #f0f4f8 !important;
+        color: #222222 !important;
+        border: 1px solid #cbd3db !important;
+        border-radius: 8px !important;
+    }
+
     /* BUTTON */
     .stButton>button {
-        background: linear-gradient(180deg, #f2f6fc 0%, #ffffff 100%) !important;
+        background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%) !important;
         color: #222222 !important;
         border-radius: 8px !important;
-        padding: 0.6rem 1.4rem !important;
+        padding: 0.7rem 1.5rem !important;
         font-weight: 600 !important;
-        border: 1px solid #d0d7de !important;
+        border: 1px solid #ccd6e2 !important;
         font-size: 1rem !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-        transition: background 0.2s ease !important;
+        transition: background 0.2s ease, box-shadow 0.2s ease !important;
     }
 
     .stButton>button:hover {
-        background: linear-gradient(180deg, #e8effa 0%, #f6faff 100%) !important;
+        background: linear-gradient(180deg, #ecf2f9 0%, #f9fbfd 100%) !important;
         color: #111111 !important;
-    }
-
-    /* SELECTBOX */
-    .stSelectbox > div > div {
-        background-color: #ffffff !important;
-        color: #111111 !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08) !important;
     }
 
     /* EXPANDER */
