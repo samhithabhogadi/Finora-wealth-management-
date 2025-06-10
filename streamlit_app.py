@@ -11,14 +11,20 @@ from openai import OpenAI
 
 client = "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"
 
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": "You are a financial advisor helping students invest their leftover pocket money."},
-        {"role": "user", "content": f"I have ₹{balance_left} left. My recent spending categories are {categories_used}. Please give me 2-3 simple suggestions on what I can do with this leftover money."}
-    ],
-    max_tokens=300
-)
+def ask_ai_advisor(balance_left, categories_used):
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You are a financial advisor helping students invest their leftover pocket money."},
+            {"role": "user", "content": f"I have ₹{balance_left} left. My recent spending categories are {categories_used}. Please give me 2-3 simple suggestions on what I can do with this leftover money."}
+        ],
+        max_tokens=300
+    )
+    return response.choices[0].message.content
+
+if st.button("Get AI Suggestions"):
+    advice = ask_ai_advisor(balance_left, categories_used)
+    st.info(advice)
 # ----------------- Helper Functions -----------------
 
 # Load or initialize user database
