@@ -5,3 +5,4 @@ yfinance>=0.2.37
 plotly>=5.21.0
 altair
 openai
+pickle
