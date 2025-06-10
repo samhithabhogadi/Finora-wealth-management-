@@ -1,9 +1,9 @@
-# finora_app.py
+# finora_budget_manager.py
 
 import streamlit as st
 import pandas as pd
 import altair as alt
-from datetime import date
+from datetime import date, datetime
 
 # --- Initialize session state ---
 if 'users' not in st.session_state:
@@ -12,6 +12,8 @@ if 'logged_in_user' not in st.session_state:
     st.session_state['logged_in_user'] = None
 if 'expenses' not in st.session_state:
     st.session_state['expenses'] = []
+if 'pocket_money' not in st.session_state:
+    st.session_state['pocket_money'] = []
 
 # --- Helper functions ---
 def login(username, password):
@@ -84,28 +86,57 @@ if st.session_state['logged_in_user'] is None:
 else:
     # --- Dashboard Layout ---
     st.sidebar.header("Navigation")
-    nav_choice = st.sidebar.radio("Go to", ["🏠 Dashboard", "➕ Add Expense", "📊 Analytics", "🚪 Logout"])
+    nav_choice = st.sidebar.radio("Go to", ["🏠 Dashboard", "💰 Set Pocket Money", "➕ Add Expense", "📊 Monthly Summary", "🚪 Logout"])
 
     username = st.session_state['logged_in_user']
     name = st.session_state['users'][username]['name']
 
     if nav_choice == "🏠 Dashboard":
         st.header(f"Welcome {name} 👋")
-        st.subheader("Your Financial Summary")
+        st.subheader("Current Month Summary")
 
-        total_expenses = sum([exp['amount'] for exp in st.session_state['expenses'] if exp['username'] == username])
+        today = date.today()
+        current_month = today.month
+        current_year = today.year
+
+        # Get pocket money for this month
+        pm_records = [pm for pm in st.session_state['pocket_money'] if pm['username']==username and pm['month']==current_month and pm['year']==current_year]
+        pm_amount = pm_records[0]['amount'] if pm_records else 0.0
+
+        # Total expenses this month
+        month_expenses = [exp for exp in st.session_state['expenses'] if exp['username']==username and exp['date'].month==current_month and exp['date'].year==current_year]
+        total_expenses = sum([exp['amount'] for exp in month_expenses])
+
+        balance_left = pm_amount - total_expenses
+
+        st.metric(label="Pocket Money", value=f"₹{pm_amount:.2f}")
         st.metric(label="Total Expenses", value=f"₹{total_expenses:.2f}")
+        st.metric(label="Balance Left", value=f"₹{balance_left:.2f}")
 
-        st.write("---")
-        st.write("Latest Expenses")
-        user_expenses = [exp for exp in st.session_state['expenses'] if exp['username'] == username]
-        if user_expenses:
-            df_exp = pd.DataFrame(user_expenses)
-            df_exp['date'] = pd.to_datetime(df_exp['date'])
-            df_exp = df_exp.sort_values(by='date', ascending=False)
-            st.dataframe(df_exp[['date', 'category', 'description', 'amount']].head(10))
-        else:
-            st.info("No expenses recorded yet.")
+    elif nav_choice == "💰 Set Pocket Money":
+        st.header("💰 Set Pocket Money for Month")
+
+        today = date.today()
+        default_month = today.month
+        default_year = today.year
+
+        month = st.selectbox("Month", list(range(1,13)), index=default_month-1)
+        year = st.number_input("Year", min_value=2020, max_value=2100, value=default_year)
+
+        pm_amount = st.number_input("Pocket Money Amount (₹)", min_value=0.0, format="%.2f")
+
+        if st.button("Save Pocket Money"):
+            # Remove existing record if exists
+            st.session_state['pocket_money'] = [pm for pm in st.session_state['pocket_money'] if not (pm['username']==username and pm['month']==month and pm['year']==year)]
+
+            st.session_state['pocket_money'].append({
+                'username': username,
+                'month': month,
+                'year': year,
+                'amount': pm_amount
+            })
+
+            st.success(f"Pocket money ₹{pm_amount:.2f} saved for {year}-{month}.")
 
     elif nav_choice == "➕ Add Expense":
         st.header("➕ Add New Expense")
@@ -125,41 +156,53 @@ else:
             })
             st.success("Expense added successfully.")
 
-    elif nav_choice == "📊 Analytics":
-        st.header("📊 Expense Analytics")
+    elif nav_choice == "📊 Monthly Summary":
+        st.header("📊 Monthly Summary (Pocket Money vs Expenses)")
 
-        user_expenses = [exp for exp in st.session_state['expenses'] if exp['username'] == username]
+        # Prepare monthly data
+        pm_df = pd.DataFrame([pm for pm in st.session_state['pocket_money'] if pm['username']==username])
+        exp_df = pd.DataFrame([{
+            'month': exp['date'].month,
+            'year': exp['date'].year,
+            'amount': exp['amount']
+        } for exp in st.session_state['expenses'] if exp['username']==username])
 
-        if user_expenses:
-            df_exp = pd.DataFrame(user_expenses)
-            df_exp['date'] = pd.to_datetime(df_exp['date'])
+        if not pm_df.empty:
+            pm_df['month_year'] = pm_df['year'].astype(str) + '-' + pm_df['month'].astype(str).str.zfill(2)
+            pm_grouped = pm_df.groupby('month_year')['amount'].sum().reset_index()
+            pm_grouped = pm_grouped.rename(columns={'amount':'Pocket Money'})
 
-            # Expenses over time
-            st.subheader("Expenses Over Time")
-            time_df = df_exp.groupby('date')['amount'].sum().reset_index()
+            if not exp_df.empty:
+                exp_df['month_year'] = exp_df['year'].astype(str) + '-' + exp_df['month'].astype(str).str.zfill(2)
+                exp_grouped = exp_df.groupby('month_year')['amount'].sum().reset_index()
+                exp_grouped = exp_grouped.rename(columns={'amount':'Expenses'})
 
-            line_chart = alt.Chart(time_df).mark_line(point=True).encode(
-                x='date:T',
-                y='amount:Q',
-                tooltip=['date', 'amount']
+                # Merge
+                summary_df = pd.merge(pm_grouped, exp_grouped, on='month_year', how='left')
+                summary_df['Expenses'] = summary_df['Expenses'].fillna(0.0)
+            else:
+                summary_df = pm_grouped.copy()
+                summary_df['Expenses'] = 0.0
+
+            summary_df['Savings'] = summary_df['Pocket Money'] - summary_df['Expenses']
+
+            # Display table
+            st.dataframe(summary_df)
+
+            # Plot graph
+            summary_melt = summary_df.melt(id_vars='month_year', value_vars=['Pocket Money','Expenses','Savings'], var_name='Metric', value_name='Amount')
+
+            chart = alt.Chart(summary_melt).mark_bar().encode(
+                x=alt.X('month_year:N', title='Month'),
+                y=alt.Y('Amount:Q', title='Amount ₹'),
+                color=alt.Color('Metric:N'),
+                tooltip=['month_year','Metric','Amount']
             ).properties(width=700, height=400)
 
-            st.altair_chart(line_chart)
-
-            # Expenses by category
-            st.subheader("Expenses by Category")
-            cat_df = df_exp.groupby('category')['amount'].sum().reset_index()
-
-            pie_chart = alt.Chart(cat_df).mark_arc(innerRadius=50).encode(
-                theta=alt.Theta(field='amount', type='quantitative'),
-                color=alt.Color(field='category', type='nominal'),
-                tooltip=['category', 'amount']
-            ).properties(width=400, height=400)
-
-            st.altair_chart(pie_chart)
+            st.altair_chart(chart)
 
         else:
-            st.info("No expenses to analyze yet.")
+            st.info("No pocket money data available. Please add pocket money first.")
 
     elif nav_choice == "🚪 Logout":
         st.session_state['logged_in_user'] = None
