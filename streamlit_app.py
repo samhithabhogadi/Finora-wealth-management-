@@ -59,24 +59,25 @@ st.markdown("""
         font-weight: 500 !important;
     }
 
-    /* BUTTONS */
-    .stButton > button {
-    background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%) !important;
+   div.stButton > button {
+    background: linear-gradient(180deg, #f9fbfd 0%, #ffffff 100%) !important;
     color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
     padding: 10px 20px !important;
     font-weight: 600 !important;
-    border: 1px solid #ccd6e2 !important;
     font-size: 1rem !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
     transition: background 0.2s ease, box-shadow 0.2s ease !important;
+    width: auto !important;  /* Do not stretch full width */
 }
 
-.stButton > button:hover {
+div.stButton > button:hover {
     background: linear-gradient(180deg, #ecf2f9 0%, #f9fbfd 100%) !important;
     color: #111111 !important;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
 }
+
 
     /* PASSWORD EYE BUTTON */
     button[kind="icon"] {
