@@ -1,4 +1,4 @@
-# finora_budget_manager_with_login.py
+# finora_budget_manager_auto_flow.py
 
 import streamlit as st
 import pandas as pd
@@ -14,13 +14,18 @@ if 'pocket_money' not in st.session_state:
     st.session_state['pocket_money'] = 0.0
 if 'expense_data' not in st.session_state:
     st.session_state['expense_data'] = []
+if 'page_flow' not in st.session_state:
+    st.session_state['page_flow'] = "Register"  # default first page
 
 # App Title
 st.title("💰 FINORA - Student Budget Manager")
 
 # Sidebar Navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Login", "Register", "FINORA App", "About"])
+st.sidebar.title("Navigation (Auto flow enabled)")
+current_page = st.sidebar.radio("You are currently at", ["Register", "Login", "FINORA App", "About"], index=["Register", "Login", "FINORA App", "About"].index(st.session_state['page_flow']))
+
+# Auto Navigation
+page = st.session_state['page_flow']
 
 # Registration Page
 if page == "Register":
@@ -40,7 +45,8 @@ if page == "Register":
                 'email': reg_email,
                 'password': reg_password
             }
-            st.success(f"User {reg_username} registered successfully! Please log in.")
+            st.success(f"User {reg_username} registered successfully! Moving to Login...")
+            st.session_state['page_flow'] = "Login"
 
 # Login Page
 elif page == "Login":
@@ -53,7 +59,8 @@ elif page == "Login":
         user_data = st.session_state['users'].get(login_username)
         if user_data and user_data['password'] == login_password:
             st.session_state['logged_in_user'] = login_username
-            st.success(f"Welcome, {user_data['name']}!")
+            st.success(f"Welcome, {user_data['name']}! Redirecting to FINORA App...")
+            st.session_state['page_flow'] = "FINORA App"
         else:
             st.error("Invalid username or password.")
 
@@ -61,13 +68,14 @@ elif page == "Login":
 elif page == "FINORA App":
     if st.session_state['logged_in_user'] is None:
         st.warning("Please log in to access the FINORA app.")
+        st.session_state['page_flow'] = "Login"
     else:
         logged_in_username = st.session_state['logged_in_user']
         logged_in_name = st.session_state['users'][logged_in_username]['name']
 
         st.header(f"Welcome {logged_in_name} to FINORA! 🎓")
 
-        finora_subpage = st.radio("Select Page", ["Set Pocket Money", "Add Expenses", "View Summary & Graphs"])
+        finora_subpage = st.radio("Select Page", ["Set Pocket Money", "Add Expenses", "View Summary & Graphs", "Logout"])
 
         if finora_subpage == "Set Pocket Money":
             st.subheader("Set Your Monthly Pocket Money")
@@ -138,20 +146,45 @@ elif page == "FINORA App":
             else:
                 st.write("No expenses recorded yet.")
 
+        elif finora_subpage == "Logout":
+            st.session_state['logged_in_user'] = None
+            st.session_state['page_flow'] = "Login"
+            st.success("You have been logged out.")
+
 # About Page
 elif page == "About":
-    st.header("About FINORA")
+    st.header("Key Features of FINORA")
     st.write("""
-    **FINORA** is an advanced Student Budget & Pocket Money Manager app with Login & Registration.
-    
-    Features:
-    - User Registration & Login
-    - Set your Monthly Pocket Money
-    - Add Expenses with Category and Date
-    - View Summary & Graphs
-    - Analyze your Spending trends
-    
-    Stay financially smart with FINORA! 🚀
+    **FINORA** is a smart and intuitive **Student Budget Manager** built to help young individuals take charge of their personal finances.
+
+    Here are some of the key capabilities that make FINORA unique:
+
+    ### 🎓 Designed for Students
+    - Built specifically keeping in mind the budgeting needs of students managing pocket money or part-time income.
+
+    ### 🗂️ Visual Financial Insights
+    - Interactive dashboards and charts to visualize where your money goes.
+    - Understand spending trends over time and by category.
+
+    ### 🔐 Personalized & Secure
+    - Secure registration and login to protect your financial data.
+    - Personal account space to track your journey.
+
+    ### 📅 Time-Based Analysis
+    - View expense trends by **date and month** — gain insights into your spending habits across different time periods.
+
+    ### 🚀 Simple and Minimal UX
+    - Light theme with a clean professional interface.
+    - Optimized for mobile and desktop use — ideal for students on the go.
+
+    ### 🌱 Foundation for Future Growth
+    - Modular architecture ready to support future enhancements:
+        - Multi-account support
+        - Cloud-based persistence
+        - Budget recommendations
+        - Smart alerts and nudges
+
+    **FINORA** empowers students to build financial discipline from an early stage — because great financial habits start young.
     """)
 
 # Footer
