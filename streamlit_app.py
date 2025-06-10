@@ -16,126 +16,145 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 
 # Custom CSS for professional styling
 st.markdown("""
-    <style>
-    /* Set page background */
-    html, body, .stApp {
-        background-color: #f9fafc !important; /* Light background */
-        color: #222222 !important; /* Default font color */
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-        font-size: 16px;
-        line-height: 1.6;
-    }
+<style>
+/* General page background */
+body {
+    background-color: #f9fafc !important;
+    color: #222222 !important;
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+}
 
-    /* All headings */
-    h1, h2, h3, h4, h5, h6 {
-        color: #111111 !important; /* Darker for headings */
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
+/* All headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #111111 !important;
+    font-weight: 700 !important;
+}
 
-    /* Paragraph text and general text */
-    .stMarkdown p, .stMarkdown span, .stMarkdown div {
-        color: #222222 !important;
-    }
+/* Paragraph text */
+.stMarkdown p, p, span, div {
+    color: #222222 !important;
+    font-size: 16px;
+}
 
-    /* Labels for inputs */
-    label {
-        color: #222222 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Tabs buttons (Login/Register) */
-    button[role="tab"] {
-        background-color: #f5f7fa !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        padding: 10px 20px !important;
-        margin-right: 5px !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-
-    button[role="tab"]:hover {
-        background-color: #e9eff5 !important;
-    }
-
-    /* Main button (Login/Register) */
-    div.stButton > button {
-        background-color: #f5f7fa !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        padding: 10px 20px !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-
-    div.stButton > button:hover {
-        background-color: #e9eff5 !important;
-        color: #111111 !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-    }
-
-    /* Input fields */
-    .stTextInput > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
-
-    /* Password field */
-    .stTextInput > div > div > div > input {
-        background-color: #ffffff !important;
-        color: #222222 !important;
-        border: 1px solid #ccd6e2 !important;
-        border-radius: 6px !important;
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    }
-
-    /* Checkbox / radio / selectbox label text */
-    .stCheckbox > label, .stRadio > label, .stSelectbox > label {
-        color: #222222 !important;
-    }
-
-  /* Sidebar background */
+/* Sidebar */
 section[data-testid="stSidebar"] {
     background-color: #f9fafc !important;
     color: #222222 !important;
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-    font-size: 16px;
 }
 
-/* Sidebar headings */
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3,
 section[data-testid="stSidebar"] h4,
 section[data-testid="stSidebar"] h5,
-section[data-testid="stSidebar"] h6 {
-    color: #111111 !important;
-}
-
-/* Sidebar labels */
+section[data-testid="stSidebar"] h6,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] label {
-    color: #222222 !important;
+    color: #111111 !important;
     font-weight: 600 !important;
 }
 
-/* Sidebar text */
-section[data-testid="stSidebar"] div,
-section[data-testid="stSidebar"] span,
-section[data-testid="stSidebar"] p {
+/* Tabs buttons (Login/Register) */
+button[role="tab"] {
+    background-color: #f5f7fa !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: 10px 20px !important;
+    margin-right: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+button[role="tab"]:hover {
+    background-color: #e9eff5 !important;
+    color: #111111 !important;
+}
+
+/* All buttons */
+div.stButton > button {
+    background-color: #f5f7fa !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: 10px 20px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+div.stButton > button:hover {
+    background-color: #e9eff5 !important;
+    color: #111111 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Input fields (Text, Number, Password) */
+input, textarea {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    font-size: 15px !important;
+}
+
+/* Select box */
+.stSelectbox > div {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border-radius: 6px !important;
+}
+
+/* Metric cards */
+.metric-card {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    font-weight: 600 !important;
+}
+
+/* Scrollbox for transactions */
+.scrollbox {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    overflow-x: auto !important;
+}
+
+/* Forms sections */
+.stForm {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+
+/* Dataframe */
+.stDataFrame {
+    background-color: #ffffff !important;
     color: #222222 !important;
 }
-    </style>
+
+/* Titles in main content */
+.stTitle {
+    color: #111111 !important;
+    font-weight: 700 !important;
+}
+</style>
 """, unsafe_allow_html=True)
+
 
 # Database setup
 def init_db():
