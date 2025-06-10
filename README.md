@@ -13,3 +13,5 @@ secondaryBackgroundColor="#ffffff"
 textColor="#222222"
 font="sans serif"
 st.session_state['page_flow'] = "Login"
+st.experimental_rerun()
+
