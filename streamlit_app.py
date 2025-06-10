@@ -18,6 +18,9 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 import streamlit as st
 
 # Inject CSS for light tone & dark font
+import streamlit as st
+
+# Inject CSS for light tone & dark font
 st.markdown("""
     <style>
     /* Page background */
@@ -90,6 +93,27 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# App content
+st.markdown("<h1>🔒 Finora: Login or Register</h1>", unsafe_allow_html=True)
+
+# Tabs for Login/Register
+tabs = st.tabs(["Login", "Register"])
+
+# Login Tab
+with tabs[0]:
+    st.text_input("Username", key="login_username")
+    st.text_input("Password", type="password", key="login_password")
+    st.button("Login")
+
+# Register Tab
+with tabs[1]:
+    st.text_input("Full Name", key="register_fullname")
+    st.text_input("Email", key="register_email")
+    st.text_input("Username", key="register_username")
+    st.text_input("Password", type="password", key="register_password")
+    st.button("Register")
+
 
 # App content
 st.markdown("<h1>🔒 Finora: Login or Register</h1>", unsafe_allow_html=True)
