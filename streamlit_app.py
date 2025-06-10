@@ -2,14 +2,18 @@
 
 import streamlit as st
 import pandas as pd
-from openai import OpenAI
+import openai
 import altair as alt
 from datetime import date, datetime
 import pickle
 import os
 
 openai.api_key = "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"
-
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[ ... ],
+    max_tokens=300
+    )
 # ----------------- Helper Functions -----------------
 
 # Load or initialize user database
