@@ -1,483 +1,145 @@
-
 import streamlit as st
 import pandas as pd
-import numpy as np
-from datetime import datetime
-import yfinance as yf
-import sqlite3
-import plotly.express as px
-import plotly.graph_objects as go
-import hashlib
-import os
-from io import StringIO
+import altair as alt
+from datetime import date
 
-# Set page configuration
-st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
+# Initialize session state
+if 'pocket_money' not in st.session_state:
+    st.session_state['pocket_money'] = 0.0
+if 'expense_data' not in st.session_state:
+    st.session_state['expense_data'] = []
 
-# Custom CSS for professional styling
+# Custom CSS for light theme and dark fonts
 st.markdown("""
-<style>
-/* General page background */
-body {
-    background-color: #f9fafc !important;
-    color: #222222 !important;
-    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-}
+    <style>
+    body {
+        background-color: #f9f9f9;
+        color: #222222;
+    }
 
-/* All headings */
-h1, h2, h3, h4, h5, h6 {
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
+    .css-6qob1r {
+        background-color: #ffffff;
+        color: #222222;
+    }
 
-/* Paragraph text and general text */
-p, span, div, label, li, a {
-    color: #222222 !important;
-    font-size: 16px !important;
-}
+    h1, h2, h3, h4 {
+        font-weight: bold;
+        color: #222222;
+    }
 
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background-color: #f9fafc !important;
-    color: #222222 !important;
-}
+    p, li, span {
+        color: #222222;
+    }
 
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3,
-section[data-testid="stSidebar"] h4,
-section[data-testid="stSidebar"] h5,
-section[data-testid="stSidebar"] h6,
-section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] span,
-section[data-testid="stSidebar"] label {
-    color: #111111 !important;
-    font-weight: 600 !important;
-}
+    .stButton>button {
+        background-color: #f0f0f0;
+        color: #222222;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
-/* Tabs buttons (Login/Register tabs) */
-button[role="tab"] {
-    background-color: #f5f7fa !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 10px 20px !important;
-    margin-right: 5px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-button[role="tab"]:hover {
-    background-color: #e9eff5 !important;
-    color: #111111 !important;
-}
-
-/* Main buttons (Login/Register/Submit/Any click buttons) */
-div.stButton > button {
-    background-color: #f5f7fa !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 10px 20px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-div.stButton > button:hover {
-    background-color: #e9eff5 !important;
-    color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-}
-
-/* Input fields (Text, Number, Password, Selectbox) */
-input, textarea {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 6px !important;
-    padding: 8px !important;
-    font-size: 15px !important;
-}
-
-/* Selectbox */
-div[data-baseweb="select"] > div {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 6px !important;
-}
-
-/* Metric cards */
-.metric-card {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-    font-weight: 600 !important;
-}
-
-/* Forms */
-.stForm {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-}
-
-/* DataFrame */
-.stDataFrame {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-}
-
-/* Main title (st.title) */
-.stTitle {
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
-
-</style>
+    .stButton>button:hover {
+        background-color: #e0e0e0;
+        color: #000000;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
-# Database setup
-def init_db():
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users 
-                 (username TEXT, password TEXT, user_id INTEGER PRIMARY KEY AUTOINCREMENT)''')
-    c.execute('''CREATE TABLE IF NOT EXISTS transactions 
-                 (user_id INTEGER, date TEXT, type TEXT, category TEXT, amount REAL, notes TEXT)''')
-    c.execute('''CREATE TABLE IF NOT EXISTS goals 
-                 (user_id INTEGER, goal TEXT, target_amount REAL, saved_amount REAL, deadline TEXT)''')
-    conn.commit()
-    conn.close()
+# App Title
+st.title("💰 FINORA - Student Budget Manager")
 
-init_db()
+# Sidebar Navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Set Pocket Money", "Add Expenses", "View Summary & Graphs", "About"])
 
-# User authentication
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+# Set Pocket Money
+if page == "Set Pocket Money":
+    st.header("Set Your Monthly Pocket Money")
+    pocket_money_input = st.number_input("Enter your Pocket Money (₹)", min_value=0.0, format="%.2f")
+    if st.button("Save Pocket Money"):
+        st.session_state['pocket_money'] = pocket_money_input
+        st.success(f"Pocket Money set to ₹{pocket_money_input:.2f}")
 
-def check_user(username, password):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute("SELECT user_id FROM users WHERE username = ? AND password = ?", 
-              (username, hash_password(password)))
-    user = c.fetchone()
-    conn.close()
-    return user
+# Add Expenses
+elif page == "Add Expenses":
+    st.header("Add Your Monthly Expenses")
 
-def register_user(username, password):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    try:
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", 
-                 (username, hash_password(password)))
-        conn.commit()
-        return True
-    except sqlite3.IntegrityError:
-        return False
-    finally:
-        conn.close()
+    expense_desc = st.text_input("Expense Description")
+    expense_amt = st.number_input("Expense Amount (₹)", min_value=0.0, format="%.2f")
+    expense_category = st.selectbox("Expense Category", ["Food", "Transport", "Entertainment", "Education", "Others"])
+    expense_date = st.date_input("Date of Expense", value=date.today())
 
-# Session state initialization
-if 'logged_in' not in st.session_state:
-    st.session_state['logged_in'] = False
-    st.session_state['user_id'] = None
-    st.session_state['username'] = None
+    if st.button("Add Expense"):
+        st.session_state['expense_data'].append({
+            "description": expense_desc,
+            "amount": expense_amt,
+            "category": expense_category,
+            "date": expense_date
+        })
+        st.success(f"Added Expense: {expense_desc} - ₹{expense_amt} [{expense_category}] on {expense_date}")
 
-# Login/Register page
-if not st.session_state['logged_in']:
-    st.title("🔒 Finora: Login or Register")
-    tab1, tab2 = st.tabs(["Login", "Register"])
-    
-    with tab1:
-        with st.form("login_form"):
-            username = st.text_input("Username")
-            password = st.text_input("Password", type="password")
-            if st.form_submit_button("Login"):
-                user = check_user(username, password)
-                if user:
-                    st.session_state['logged_in'] = True
-                    st.session_state['user_id'] = user[0]
-                    st.session_state['username'] = username
-                    st.success("Logged in successfully!")
-                    st.rerun()
-                else:
-                    st.error("Invalid credentials.")
-    
-    with tab2:
-        with st.form("register_form"):
-            new_username = st.text_input("New Username")
-            new_password = st.text_input("New Password", type="password")
-            if st.form_submit_button("Register"):
-                if register_user(new_username, new_password):
-                    st.success("Registered successfully! Please login.")
-                else:
-                    st.error("Username already exists.")
-    st.stop()
+# View Summary & Graphs
+elif page == "View Summary & Graphs":
+    st.header("Summary of Your Pocket Money")
 
-# Load data from database
-def load_transactions(user_id):
-    conn = sqlite3.connect('finora.db')
-    df = pd.read_sql_query("SELECT * FROM transactions WHERE user_id = ?", conn, params=(user_id,))
-    conn.close()
-    return df
+    total_expenses = sum([item['amount'] for item in st.session_state['expense_data']])
+    balance_left = st.session_state['pocket_money'] - total_expenses
 
-def load_goals(user_id):
-    conn = sqlite3.connect('finora.db')
-    df = pd.read_sql_query("SELECT * FROM goals WHERE user_id = ?", conn, params=(user_id,))
-    conn.close()
-    return df
+    st.subheader(f"Total Pocket Money: ₹{st.session_state['pocket_money']:.2f}")
+    st.subheader(f"Total Expenses: ₹{total_expenses:.2f}")
+    st.subheader(f"Balance Left: ₹{balance_left:.2f}")
 
-# Save data to database
-def save_transaction(user_id, date, t_type, category, amount, notes):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO transactions (user_id, date, type, category, amount, notes) VALUES (?, ?, ?, ?, ?, ?)",
-              (user_id, date, t_type, category, amount, notes))
-    conn.commit()
-    conn.close()
+    st.markdown("---")
 
-def save_goal(user_id, goal, target, saved, deadline):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO goals (user_id, goal, target_amount, saved_amount, deadline) VALUES (?, ?, ?, ?, ?)",
-              (user_id, goal, target, saved, deadline))
-    conn.commit()
-    conn.close()
+    # Display Expense Details
+    st.subheader("Expense Details")
+    if st.session_state['expense_data']:
+        df_expense = pd.DataFrame(st.session_state['expense_data'])
+        st.dataframe(df_expense)
 
-def update_transaction(user_id, index, date, t_type, category, amount, notes):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute("UPDATE transactions SET date = ?, type = ?, category = ?, amount = ?, notes = ? WHERE user_id = ? AND rowid = ?",
-              (date, t_type, category, amount, notes, user_id, index + 1))
-    conn.commit()
-    conn.close()
+        # Pie Chart by Category
+        st.subheader("Expense Breakdown by Category")
+        category_df = df_expense.groupby('category')['amount'].sum().reset_index()
 
-def delete_transaction(user_id, index):
-    conn = sqlite3.connect('finora.db')
-    c = conn.cursor()
-    c.execute("DELETE FROM transactions WHERE user_id = ? AND rowid = ?", (user_id, index + 1))
-    conn.commit()
-    conn.close()
+        pie_chart = alt.Chart(category_df).mark_arc(innerRadius=50).encode(
+            theta=alt.Theta(field="amount", type="quantitative"),
+            color=alt.Color(field="category", type="nominal"),
+            tooltip=["category", "amount"]
+        ).properties(width=400, height=400)
 
-# Sidebar navigation
-st.sidebar.title(f"👋 Welcome, {st.session_state['username']}")
-st.sidebar.markdown("### Wealth Management Dashboard")
-page = st.sidebar.radio("Navigate", ["Dashboard", "Transactions", "Goals", "Reports", "Investments", "Export Data"])
+        st.altair_chart(pie_chart)
 
-# Financial Education
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 📚 Financial Education")
-st.sidebar.markdown("""
-**Equity Investments**:
-- Stocks: Ownership in companies
-- ETFs: Diversified market exposure
-- High risk, high reward
+        # Line Chart over Time
+        st.subheader("Spending Over Time")
+        time_df = df_expense.groupby('date')['amount'].sum().reset_index()
 
-**Debt Investments**:
-- Bonds: Government or corporate
-- Fixed Deposits: Bank-backed
-- Low risk, stable returns
+        line_chart = alt.Chart(time_df).mark_line(point=True).encode(
+            x=alt.X('date:T', title='Date'),
+            y=alt.Y('amount:Q', title='Amount Spent'),
+            tooltip=["date", "amount"]
+        ).properties(width=700, height=400)
 
-**Hybrid Options**:
-- Mutual Funds: Professionally managed
-- SIPs: Systematic investments
-- Balanced risk-reward
-""")
+        st.altair_chart(line_chart)
 
-# Dashboard Page
-if page == "Dashboard":
-    st.title("📊 Financial Dashboard")
-    df = load_transactions(st.session_state['user_id'])
-    goals = load_goals(st.session_state['user_id'])
-    
-    income = df[df['type'] == 'Income']['amount'].sum()
-    expense = df[df['type'] == 'Expense']['amount'].sum()
-    savings = income - expense
-    
-    st.markdown("### 💼 Financial Overview")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Total Income", f"₹{income:,.2f}")
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col2:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Total Expenses", f"₹{expense:,.2f}")
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col3:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Net Savings", f"₹{savings:,.2f}")
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    if not goals.empty:
-        st.markdown("### 🎯 Goal Progress")
-        for _, row in goals.iterrows():
-            progress = (row['saved_amount'] / row['target_amount']) * 100
-            st.progress(min(progress / 100, 1.0))
-            st.write(f"{row['goal']}: ₹{row['saved_amount']:,.2f} / ₹{row['target_amount']:,.2f} ({progress:.1f}%)")
-    
-    if not df.empty:
-        st.markdown("### 🧾 Recent Transactions")
-        st.markdown('<div class="scrollbox">', unsafe_allow_html=True)
-        st.dataframe(df.sort_values(by='date', ascending=False).head(10))
-        st.markdown('</div>', unsafe_allow_html=True)
-
-# Transactions Page
-elif page == "Transactions":
-    st.title("💸 Manage Transactions")
-    with st.form("transaction_form"):
-        date = st.date_input("Date", datetime.today())
-        t_type = st.selectbox("Type", ["Income", "Expense"])
-        category = st.selectbox("Category", ["Salary", "Food", "Transport", "Rent", "Utilities", "Entertainment", "Investment", "Miscellaneous"])
-        amount = st.number_input("Amount (₹)", min_value=0.0, format="%0.2f")
-        notes = st.text_input("Notes")
-        submitted = st.form_submit_button("Add Transaction")
-        
-        if submitted:
-            if amount <= 0:
-                st.error("Amount must be positive.")
-            else:
-                save_transaction(st.session_state['user_id'], date, t_type, category, amount, notes)
-                st.success("Transaction added!")
-    
-    st.subheader("Transaction History")
-    df = load_transactions(st.session_state['user_id'])
-    if not df.empty:
-        st.dataframe(df)
-        
-        st.subheader("Edit/Delete Transaction")
-        with st.form("edit_transaction_form"):
-            index = st.number_input("Transaction Index to Edit/Delete", min_value=0, max_value=len(df)-1, step=1)
-            date = st.date_input("Edit Date", value=pd.to_datetime(df.iloc[index]['date']))
-            t_type = st.selectbox("Edit Type", ["Income", "Expense"], index=0 if df.iloc[index]['type'] == 'Income' else 1)
-            category = st.selectbox("Edit Category", ["Salary", "Food", "Transport", "Rent", "Utilities", "Entertainment", "Investment", "Miscellaneous"], 
-                                  index=["Salary", "Food", "Transport", "Rent", "Utilities", "Entertainment", "Investment", "Miscellaneous"].index(df.iloc[index]['category']))
-            amount = st.number_input("Edit Amount (₹)", min_value=0.0, value=float(df.iloc[index]['amount']), format="%0.2f")
-            notes = st.text_input("Edit Notes", value=df.iloc[index]['notes'])
-            col1, col2 = st.form_submit_button("Update"), st.form_submit_button("Delete")
-            
-            if col1:
-                if amount <= 0:
-                    st.error("Amount must be positive.")
-                else:
-                    update_transaction(st.session_state['user_id'], index, date, t_type, category, amount, notes)
-                    st.success("Transaction updated!")
-            if col2:
-                delete_transaction(st.session_state['user_id'], index)
-                st.success("Transaction deleted!")
-
-# Goals Page
-elif page == "Goals":
-    st.title("🎯 Manage Financial Goals")
-    with st.form("goal_form"):
-        goal_name = st.text_input("Goal Name")
-        target = st.number_input("Target Amount (₹)", min_value=100.0, format="%0.2f")
-        saved = st.number_input("Current Saved Amount (₹)", min_value=0.0, format="%0.2f")
-        deadline = st.date_input("Deadline")
-        submitted = st.form_submit_button("Add Goal")
-        
-        if submitted:
-            if not goal_name:
-                st.error("Goal name is required.")
-            elif target <= saved:
-                st.error("Target amount must be greater than saved amount.")
-            else:
-                save_goal(st.session_state['user_id'], goal_name, target, saved, deadline)
-                st.success("Goal added!")
-    
-    st.subheader("Your Goals")
-    goals = load_goals(st.session_state['user_id'])
-    if not goals.empty:
-        st.dataframe(goals)
-
-# Reports Page
-elif page == "Reports":
-    st.title("📊 Financial Reports")
-    df = load_transactions(st.session_state['user_id'])
-    if df.empty:
-        st.warning("No transactions available.")
     else:
-        st.subheader("Expenses by Category")
-        exp_df = df[df['type'] == 'Expense']
-        if not exp_df.empty:
-            category_summary = exp_df.groupby('category')['amount'].sum().reset_index()
-            fig = px.bar(category_summary, x='category', y='amount', title="Expenses by Category")
-            st.plotly_chart(fig)
-        
-        st.subheader("Monthly Trends")
-        df['month'] = pd.to_datetime(df['date']).dt.to_period('M').astype(str)
-        monthly = df.groupby(['month', 'type'])['amount'].sum().unstack().fillna(0)
-        fig = px.line(monthly, title="Income vs Expenses Over Time")
-        st.plotly_chart(fig)
+        st.write("No expenses recorded yet.")
 
-# Investments Page
-elif page == "Investments":
-    st.title("💡 Investment Portfolio")
-    st.markdown("""
-    ### Suggested Investments
-    - **SIPs in Equity Mutual Funds**: Long-term wealth creation.
-    - **Fixed Deposits**: Secure, guaranteed returns.
-    - **Digital Gold**: Hedge against inflation.
-    - **PPF**: Tax-saving, risk-free option.
+# About
+elif page == "About":
+    st.header("About FINORA")
+    st.write("""
+    **FINORA** is an advanced Student Budget & Pocket Money Manager app.
+    
+    Features:
+    - Set your Monthly Pocket Money
+    - Add Expenses with Category and Date
+    - View Summary & Graphs
+    - Analyze your Spending trends
+    
+    Stay financially smart with FINORA! 🚀
     """)
-    
-    st.subheader("Track Stocks")
-    stock_symbols = st.text_input("Enter Stock Symbols (comma-separated, e.g., AAPL,TSLA)", "AAPL").split(',')
-    stock_symbols = [s.strip().upper() for s in stock_symbols]
-    
-    for symbol in stock_symbols:
-        try:
-            stock = yf.Ticker(symbol)
-            stock_data = stock.history(period="1mo")
-            if not stock_data.empty:
-                st.write(f"**{symbol} Performance**")
-                st.dataframe(stock_data[['Open', 'High', 'Low', 'Close', 'Volume']])
-                fig = px.line(stock_data, y='Close', title=f"{symbol} Closing Price")
-                st.plotly_chart(fig)
-            else:
-                st.warning(f"No data available for {symbol}.")
-        except:
-            st.error(f"Invalid symbol: {symbol}")
 
-# Export Data Page
-elif page == "Export Data":
-    st.title("📥 Export Data")
-    df = load_transactions(st.session_state['user_id'])
-    goals = load_goals(st.session_state['user_id'])
-    
-    if not df.empty:
-        st.subheader("Export Transactions")
-        csv = df.to_csv(index=False)
-        st.download_button(
-            label="Download Transactions as CSV",
-            data=csv,
-            file_name="transactions.csv",
-            mime="text/csv"
-        )
-    
-    if not goals.empty:
-        st.subheader("Export Goals")
-        csv = goals.to_csv(index=False)
-        st.download_button(
-            label="Download Goals as CSV",
-            data=csv,
-            file_name="goals.csv",
-            mime="text/csv"
-        )
-
-# Logout button
-if st.sidebar.button("Logout"):
-    st.session_state['logged_in'] = False
-    st.session_state['user_id'] = None
-    st.session_state['username'] = None
-    st.rerun()
+# Footer
+st.markdown("---")
+st.markdown("© 2025 FINORA Student Budget Manager App. All rights reserved.", unsafe_allow_html=True)
