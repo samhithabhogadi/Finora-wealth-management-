@@ -2,8 +2,11 @@
 
 import streamlit as st
 import pandas as pd
+import openai
 import altair as alt
 from datetime import date, datetime
+
+openai.api_key = "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"
 
 # --- Initialize session state ---
 if 'users' not in st.session_state:
@@ -32,6 +35,25 @@ def register(username, name, email, password):
         'password': password
     }
     return True
+
+def ask_ai_advisor(balance, expenses_summary):
+    prompt = f"""
+    I am a student. I have ₹{balance:.2f} left this month after expenses.
+    My typical spending categories are: {expenses_summary}.
+    Please suggest how I can utilize the remaining money wisely.
+    Should I invest? How much should I keep as buffer? Give practical advice in simple terms suitable for a student.
+    """
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a smart financial advisor for students."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=300
+    )
+
+    return response['choices'][0]['message']['content']
 
 # --- Styling ---
 st.markdown("""
@@ -86,7 +108,7 @@ if st.session_state['logged_in_user'] is None:
 else:
     # --- Dashboard Layout ---
     st.sidebar.header("Navigation")
-    nav_choice = st.sidebar.radio("Go to", ["🏠 Dashboard", "💰 Set Pocket Money", "➕ Add Expense", "📊 Monthly Summary", "🚪 Logout"])
+    nav_choice = st.sidebar.radio("Go to", ["🏠 Dashboard", "💰 Set Pocket Money", "➕ Add Expense", "📊 Monthly Summary", "🤖 AI Advisor", "🚪 Logout"])
 
     username = st.session_state['logged_in_user']
     name = st.session_state['users'][username]['name']
@@ -168,12 +190,12 @@ else:
         } for exp in st.session_state['expenses'] if exp['username']==username])
 
         if not pm_df.empty:
-            pm_df['month_year'] = pm_df['year'].astype(str) + '-' + pm_df['month'].astype(str).str.zfill(2)
+            pm_df['month_year'] = pm_df['year'].astype(str) + '-' + pm_df['month'].astype(str).zfill(2)
             pm_grouped = pm_df.groupby('month_year')['amount'].sum().reset_index()
             pm_grouped = pm_grouped.rename(columns={'amount':'Pocket Money'})
 
             if not exp_df.empty:
-                exp_df['month_year'] = exp_df['year'].astype(str) + '-' + exp_df['month'].astype(str).str.zfill(2)
+                exp_df['month_year'] = exp_df['year'].astype(str) + '-' + exp_df['month'].astype(str).zfill(2)
                 exp_grouped = exp_df.groupby('month_year')['amount'].sum().reset_index()
                 exp_grouped = exp_grouped.rename(columns={'amount':'Expenses'})
 
@@ -204,10 +226,36 @@ else:
         else:
             st.info("No pocket money data available. Please add pocket money first.")
 
+    elif nav_choice == "🤖 AI Advisor":
+        st.header("🤖 Ask AI Financial Advisor")
+
+        # Prepare balance and expenses summary
+        today = date.today()
+        current_month = today.month
+        current_year = today.year
+
+        # Pocket Money
+        pm_records = [pm for pm in st.session_state['pocket_money'] if pm['username']==username and pm['month']==current_month and pm['year']==current_year]
+        pm_amount = pm_records[0]['amount'] if pm_records else 0.0
+
+        # Expenses
+        month_expenses = [exp for exp in st.session_state['expenses'] if exp['username']==username and exp['date'].month==current_month and exp['date'].year==current_year]
+        total_expenses = sum([exp['amount'] for exp in month_expenses])
+
+        balance_left = pm_amount - total_expenses
+        categories_used = ", ".join(set([exp['category'] for exp in month_expenses]))
+
+        # User Input
+        user_question = st.text_input("Ask your question to the AI Advisor:")
+
+        if st.button("Get Advice"):
+            advice = ask_ai_advisor(balance_left, categories_used)
+            st.markdown(f"**AI Advisor:** {advice}")
+
     elif nav_choice == "🚪 Logout":
         st.session_state['logged_in_user'] = None
         st.success("You have been logged out.")
 
 # --- Footer ---
 st.markdown("---")
-st.markdown("© 2025 FINORA Student Budget Manager App. All rights reserved.", unsafe_allow_html=True)
+st.markdown("© 2025 FINORA Student Budget Manager App with AI Advisor. All rights reserved.", unsafe_allow_html=True)
