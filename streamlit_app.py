@@ -15,51 +15,51 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
-import streamlit as st
-
 st.markdown("""
 <style>
-/* Ensure light background for the entire app */
-.stApp {
-    background-color: #fefefe !important;
+/* General page background */
+body {
+    background-color: #f9fafc !important;
     color: #222222 !important;
-    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
 }
 
-/* All headings (h1 to h6, including main title) */
-h1, h2, h3, h4, h5, h6, [data-testid="stHeader"] {
+/* All headings */
+h1, h2, h3, h4, h5, h6 {
     color: #111111 !important;
     font-weight: 700 !important;
 }
 
-/* General text (paragraphs, labels, etc.) */
+/* Paragraph text and general text */
 p, span, div, label, li, a {
     color: #222222 !important;
     font-size: 16px !important;
 }
 
 /* Sidebar */
-[data-testid="stSidebar"] {
-    background-color: #fefefe !important;
+section[data-testid="stSidebar"] {
+    background-color: #f9fafc !important;
+    color: #222222 !important;
 }
 
-[data-testid="stSidebar"] h1,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] h4,
-[data-testid="stSidebar"] h5,
-[data-testid="stSidebar"] h6,
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] label {
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] h4,
+section[data-testid="stSidebar"] h5,
+section[data-testid="stSidebar"] h6,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label {
     color: #111111 !important;
     font-weight: 600 !important;
 }
 
-/* Login/Register tabs */
-button[data-testid="stTab"] {
+/* Tabs buttons (Login/Register tabs) */
+button[role="tab"] {
     background-color: #f5f7fa !important;
-    color: #111111 !important;
-    border: 1px solid #d1d5db !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
@@ -69,16 +69,16 @@ button[data-testid="stTab"] {
     transition: all 0.2s ease-in-out !important;
 }
 
-button[data-testid="stTab"]:hover {
-    background-color: #e5e7eb !important;
+button[role="tab"]:hover {
+    background-color: #e9eff5 !important;
     color: #111111 !important;
 }
 
-/* Buttons (Login, Register, Submit, etc.) */
-button[kind="primary"], button[kind="secondary"] {
+/* Main buttons (Login/Register/Submit/Any click buttons) */
+div.stButton > button {
     background-color: #f5f7fa !important;
-    color: #111111 !important;
-    border: 1px solid #d1d5db !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
@@ -88,38 +88,64 @@ button[kind="primary"], button[kind="secondary"] {
     transition: all 0.2s ease-in-out !important;
 }
 
-button[kind="primary"]:hover, button[kind="secondary"]:hover {
-    background-color: #e5e7eb !important;
+div.stButton > button:hover {
+    background-color: #e9eff5 !important;
     color: #111111 !important;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
 /* Input fields (Text, Number, Password, Selectbox) */
-input, textarea, [data-baseweb="select"] > div {
+input, textarea {
     background-color: #ffffff !important;
     color: #222222 !important;
-    border: 1px solid #d1d5db !important;
+    border: 1px solid #ccd6e2 !important;
     border-radius: 6px !important;
     padding: 8px !important;
     font-size: 15px !important;
 }
 
-/* Metric cards and forms */
-div[data-testid="stMetric"], div[data-testid="stForm"] {
+/* Selectbox */
+div[data-baseweb="select"] > div {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border: 1px solid #ccd6e2 !important;
+    border-radius: 6px !important;
+}
+
+/* Metric cards */
+.metric-card {
     background-color: #ffffff !important;
     color: #222222 !important;
     border-radius: 8px !important;
     padding: 1rem !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    font-weight: 600 !important;
+}
+
+/* Forms */
+.stForm {
+    background-color: #ffffff !important;
+    color: #222222 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
 /* DataFrame */
-div[data-testid="stDataFrame"] {
+.stDataFrame {
     background-color: #ffffff !important;
     color: #222222 !important;
 }
+
+/* Main title (st.title) */
+.stTitle {
+    color: #111111 !important;
+    font-weight: 700 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
+
 # Database setup
 def init_db():
     conn = sqlite3.connect('finora.db')
