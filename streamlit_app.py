@@ -15,88 +15,83 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
-st.markdown(
-    """
+st.markdown("""
     <style>
-        /* App background */
-        .stApp {
-            background-color: #f9fafb;
-            color: #0f172a;
-            padding: 2rem;
-        }
 
-        /* Main heading (st.title) */
-        .stApp h1 {
-            color: #0f172a;
-            font-weight: 800;
-            font-size: 2.5rem;
-        }
+    /* GENERAL BODY */
+    body, .stApp {
+        background-color: #f9fafc !important;
+        color: #111111 !important;
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+        font-weight: 500 !important;
+    }
 
-        /* Sub-headings */
-        h2, h3, h4, h5, h6 {
-            color: #0f172a;
-            font-weight: 700;
-        }
+    /* MAIN HEADING */
+    h1, h2, h3, h4, h5, h6 {
+        color: #111111 !important;
+        font-weight: 700 !important;
+    }
 
-        /* Labels (Username, Password, etc) */
-        .stTextInput label, .stPasswordInput label, .stSelectbox label, .stRadio label {
-            color: #0f172a;
-            font-weight: 600;
-            font-size: 1rem;
-        }
+    /* TABS (Login/Register) */
+    div[role="tablist"] > div[role="tab"] {
+        background-color: #f0f4f8 !important;
+        color: #222222 !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        margin-right: 6px !important;
+        padding: 0.6rem 1.2rem !important;
+        border: 1px solid #d5dce2 !important;
+    }
 
-        /* Text input and password input box */
-        .stTextInput input, .stPasswordInput input {
-            background: linear-gradient(180deg, #ffffff, #f0f4f8);
-            color: #0f172a;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 0.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-        }
+    div[role="tablist"] > div[role="tab"][aria-selected="true"] {
+        background-color: #e6edf5 !important;
+        color: #111111 !important;
+        font-weight: 700 !important;
+        border: 1px solid #c5cfd8 !important;
+    }
 
-      /* Light tone button */
-.stButton>button {
-    background: linear-gradient(180deg, #e8f0fe 0%, #ffffff 100%);
-    color: #333333; /* dark font */
-    border-radius: 8px;
-    padding: 0.5rem 1.2rem;
-    font-weight: 600;
-    border: 1px solid #d0d7de; /* very soft border */
-    font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* very subtle shadow */
-    transition: background 0.2s ease;
-}
+    /* TEXT INPUT BOXES */
+    .stTextInput > div > div > input {
+        background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%) !important;
+        color: #222222 !important;
+        border: 1px solid #ccd6e0 !important;
+        border-radius: 8px !important;
+        padding: 0.7rem 1rem !important;
+        font-weight: 500 !important;
+    }
 
-.stButton>button:hover {
-    background: linear-gradient(180deg, #dce6fc 0%, #f6faff 100%);
-    color: #111111; /* slight dark on hover */
-}
+    /* BUTTON */
+    .stButton>button {
+        background: linear-gradient(180deg, #f2f6fc 0%, #ffffff 100%) !important;
+        color: #222222 !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.4rem !important;
+        font-weight: 600 !important;
+        border: 1px solid #d0d7de !important;
+        font-size: 1rem !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+        transition: background 0.2s ease !important;
+    }
 
-        /* Tabs */
-div[role="tablist"] > div[role="tab"] {
-    background-color: #f5f7fa !important; /* light tone */
-    color: #333333 !important;            /* dark font */
-    font-weight: 600 !important;
-    border-radius: 6px !important;
-    margin-right: 5px !important;
-    padding: 0.5rem 1rem !important;
-}
+    .stButton>button:hover {
+        background: linear-gradient(180deg, #e8effa 0%, #f6faff 100%) !important;
+        color: #111111 !important;
+    }
 
-div[role="tablist"] > div[role="tab"][aria-selected="true"] {
-    background-color: #e0ebf8 !important; /* slightly highlighted tab */
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
+    /* SELECTBOX */
+    .stSelectbox > div > div {
+        background-color: #ffffff !important;
+        color: #111111 !important;
+    }
+
+    /* EXPANDER */
+    .stExpanderHeader {
+        color: #111111 !important;
+        font-weight: 600 !important;
+    }
 
     </style>
-    """,
-    unsafe_allow_html=True
-)
-  
-      
-  
+""", unsafe_allow_html=True)
 
 # Database setup
 def init_db():
