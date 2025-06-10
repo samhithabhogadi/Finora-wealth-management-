@@ -28,7 +28,7 @@ st.markdown(
         /* Main heading (st.title) */
         .stApp h1 {
             color: #0f172a;
-            font-weight: 800; /* Very bold */
+            font-weight: 800;
             font-size: 2.5rem;
         }
 
@@ -43,6 +43,17 @@ st.markdown(
             color: #0f172a;
             font-weight: 600;
             font-size: 1rem;
+        }
+
+        /* Text input and password input box */
+        .stTextInput input, .stPasswordInput input {
+            background: linear-gradient(180deg, #ffffff, #f0f4f8);
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         /* Buttons */
@@ -69,6 +80,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 # Database setup
 def init_db():
