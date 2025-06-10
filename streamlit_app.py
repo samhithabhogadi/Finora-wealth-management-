@@ -17,12 +17,11 @@ st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_i
 # Custom CSS for professional styling
 st.markdown("""
     <style>
-
-    /* PAGE BACKGROUND + FONT */
-    body, .stApp {
-        background-color: #f9fafc !important;
-        color: #111111 !important;
-        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+    /* GLOBAL BACKGROUND & FONTS */
+    .stApp {
+        background-color: #f9fafc;
+        color: #111111;
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     }
 
     /* HEADINGS */
@@ -32,48 +31,40 @@ st.markdown("""
     }
 
     /* TABS (Login/Register) */
-    div[role="tablist"] > div[role="tab"] {
-        background-color: #f1f4f8 !important;
-        color: #222222 !important;
-        font-weight: 600 !important;
-        border-radius: 8px !important;
-        margin-right: 6px !important;
-        padding: 0.5rem 1rem !important;
-        border: 1px solid #d3dce6 !important;
-        transition: background 0.3s ease !important;
+    /* The current class Streamlit uses is .stTabs */
+    .stTabs [data-baseweb="tab"] {
+        background-color: #f1f4f8;
+        color: #222222;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-right: 6px;
+        padding: 8px 16px;
+        border: 1px solid #d3dce6;
     }
 
-    div[role="tablist"] > div[role="tab"][aria-selected="true"] {
+    .stTabs [aria-selected="true"] {
         background-color: #e3eaf2 !important;
         color: #111111 !important;
         font-weight: 700 !important;
         border: 1px solid #c3cdd6 !important;
     }
 
-    /* TEXT INPUTS */
-    .stTextInput > div > div > input {
-        background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%) !important;
+    /* INPUT TEXTBOXES */
+    input[type="text"], input[type="password"] {
+        background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
         color: #222222 !important;
         border: 1px solid #cbd3db !important;
         border-radius: 8px !important;
-        padding: 0.7rem 1rem !important;
+        padding: 10px 14px !important;
         font-weight: 500 !important;
     }
 
-    /* PASSWORD WIDGET (eye button) */
-    .stTextInput > div > div > div > button {
-        background: #f0f4f8 !important;
-        color: #222222 !important;
-        border: 1px solid #cbd3db !important;
-        border-radius: 8px !important;
-    }
-
-    /* BUTTON */
+    /* BUTTONS */
     .stButton>button {
         background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%) !important;
         color: #222222 !important;
         border-radius: 8px !important;
-        padding: 0.7rem 1.5rem !important;
+        padding: 10px 20px !important;
         font-weight: 600 !important;
         border: 1px solid #ccd6e2 !important;
         font-size: 1rem !important;
@@ -87,10 +78,12 @@ st.markdown("""
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08) !important;
     }
 
-    /* EXPANDER */
-    .stExpanderHeader {
-        color: #111111 !important;
-        font-weight: 600 !important;
+    /* PASSWORD EYE BUTTON */
+    button[kind="icon"] {
+        background: #f0f4f8 !important;
+        color: #222222 !important;
+        border: 1px solid #cbd3db !important;
+        border-radius: 8px !important;
     }
 
     </style>
