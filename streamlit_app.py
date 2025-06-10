@@ -15,7 +15,9 @@ from io import StringIO
 st.set_page_config(page_title="Finora: Wealth Management", layout="wide", page_icon="💼")
 
 # Custom CSS for professional styling
+import streamlit as st
 
+# Inject CSS for light tone & dark font
 st.markdown("""
     <style>
     /* Page background */
@@ -88,6 +90,27 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# App content
+st.markdown("<h1>🔒 Finora: Login or Register</h1>", unsafe_allow_html=True)
+
+# Tabs for Login/Register
+tabs = st.tabs(["Login", "Register"])
+
+# Login Tab
+with tabs[0]:
+    st.text_input("Username")
+    st.text_input("Password", type="password")
+    st.button("Login")
+
+# Register Tab
+with tabs[1]:
+    st.text_input("Full Name")
+    st.text_input("Email")
+    st.text_input("Username")
+    st.text_input("Password", type="password")
+    st.button("Register")
+
 
 # Database setup
 def init_db():
