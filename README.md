@@ -15,3 +15,4 @@ font="sans serif"
 st.session_state['page_flow'] = "Login"
 st.experimental_rerun()
 
+pip install openai
