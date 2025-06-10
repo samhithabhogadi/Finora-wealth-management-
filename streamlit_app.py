@@ -1,175 +1,110 @@
+# finora_budget_manager.py
+
 import streamlit as st
+import pandas as pd
+import altair as alt
+from datetime import date
 
-# Light mode CSS with full enforcement
-st.markdown("""
-<style>
-/* Global page background */
-body {
-    background-color: #f9fafc !important;
-    color: #222222 !important;
-    font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !important;
-}
+# Initialize session state
+if 'pocket_money' not in st.session_state:
+    st.session_state['pocket_money'] = 0.0
+if 'expense_data' not in st.session_state:
+    st.session_state['expense_data'] = []
 
-/* All headings */
-h1, h2, h3, h4, h5, h6 {
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
+# App Title
+st.title("💰 FINORA - Student Budget Manager")
 
-/* General text */
-p, span, div, label, li, a {
-    color: #222222 !important;
-    font-size: 16px !important;
-}
-
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background-color: #f9fafc !important;
-    color: #222222 !important;
-}
-
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3,
-section[data-testid="stSidebar"] h4,
-section[data-testid="stSidebar"] h5,
-section[data-testid="stSidebar"] h6,
-section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] span,
-section[data-testid="stSidebar"] label {
-    color: #111111 !important;
-    font-weight: 600 !important;
-}
-
-/* Tabs (Login/Register) */
-button[role="tab"] {
-    background-color: #f5f7fa !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 10px 20px !important;
-    margin-right: 5px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-button[role="tab"]:hover {
-    background-color: #e9eff5 !important;
-    color: #111111 !important;
-}
-
-/* Main buttons */
-div.stButton > button {
-    background-color: #f5f7fa !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 10px 20px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-div.stButton > button:hover {
-    background-color: #e9eff5 !important;
-    color: #111111 !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-}
-
-/* Input fields (Text, Number, Password, Textarea) */
-input, textarea {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 6px !important;
-    padding: 8px !important;
-    font-size: 15px !important;
-}
-
-/* Selectbox */
-div[data-baseweb="select"] > div {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border: 1px solid #ccd6e2 !important;
-    border-radius: 6px !important;
-}
-
-/* Metric cards */
-.metric-card {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-    font-weight: 600 !important;
-}
-
-/* Forms */
-.stForm {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-    border-radius: 8px !important;
-    padding: 1rem !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-}
-
-/* DataFrame */
-.stDataFrame {
-    background-color: #ffffff !important;
-    color: #222222 !important;
-}
-
-/* Main title */
-.stTitle {
-    color: #111111 !important;
-    font-weight: 700 !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------------
-# Sample app content
-# ---------------------
-
-# Sidebar
+# Sidebar Navigation
 st.sidebar.title("Navigation")
-st.sidebar.write("Choose your page.")
+page = st.sidebar.radio("Go to", ["Set Pocket Money", "Add Expenses", "View Summary & Graphs", "About"])
 
-# Main page
-st.title("Welcome to Finora Wealth Management")
-st.write("Please log in or register below:")
+# Set Pocket Money
+if page == "Set Pocket Money":
+    st.header("Set Your Monthly Pocket Money")
+    pocket_money_input = st.number_input("Enter your Pocket Money (₹)", min_value=0.0, format="%.2f")
+    if st.button("Save Pocket Money"):
+        st.session_state['pocket_money'] = pocket_money_input
+        st.success(f"Pocket Money set to ₹{pocket_money_input:.2f}")
 
-# Tabs for Login and Register
-tab1, tab2 = st.tabs(["Login", "Register"])
+# Add Expenses
+elif page == "Add Expenses":
+    st.header("Add Your Monthly Expenses")
 
-# Login Tab
-with tab1:
-    st.subheader("Login")
-    username = st.text_input("Username", key="login_username")
-    password = st.text_input("Password", type="password", key="login_password")
-    login_btn = st.button("Login")
-    if login_btn:
-        st.success(f"Welcome back, {username}!")
+    expense_desc = st.text_input("Expense Description")
+    expense_amt = st.number_input("Expense Amount (₹)", min_value=0.0, format="%.2f")
+    expense_category = st.selectbox("Expense Category", ["Food", "Transport", "Entertainment", "Education", "Others"])
+    expense_date = st.date_input("Date of Expense", value=date.today())
 
-# Register Tab
-with tab2:
-    st.subheader("Register")
-    new_username = st.text_input("Choose a Username", key="register_username")
-    new_password = st.text_input("Choose a Password", type="password", key="register_password")
-    register_btn = st.button("Register")
-    if register_btn:
-        st.success(f"Account created for {new_username}!")
+    if st.button("Add Expense"):
+        st.session_state['expense_data'].append({
+            "description": expense_desc,
+            "amount": expense_amt,
+            "category": expense_category,
+            "date": expense_date
+        })
+        st.success(f"Added Expense: {expense_desc} - ₹{expense_amt} [{expense_category}] on {expense_date}")
 
-# Sample Metrics Section
-st.header("Our Performance Metrics")
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric("AUM", "₹500 Cr", "+5%")
-with col2:
-    st.metric("Clients", "10,000+", "+10%")
-with col3:
-    st.metric("Satisfaction", "98%", "↑")
+# View Summary & Graphs
+elif page == "View Summary & Graphs":
+    st.header("Summary of Your Pocket Money")
+
+    total_expenses = sum([item['amount'] for item in st.session_state['expense_data']])
+    balance_left = st.session_state['pocket_money'] - total_expenses
+
+    st.subheader(f"Total Pocket Money: ₹{st.session_state['pocket_money']:.2f}")
+    st.subheader(f"Total Expenses: ₹{total_expenses:.2f}")
+    st.subheader(f"Balance Left: ₹{balance_left:.2f}")
+
+    st.markdown("---")
+
+    # Display Expense Details
+    st.subheader("Expense Details")
+    if st.session_state['expense_data']:
+        df_expense = pd.DataFrame(st.session_state['expense_data'])
+        st.dataframe(df_expense)
+
+        # Pie Chart by Category
+        st.subheader("Expense Breakdown by Category")
+        category_df = df_expense.groupby('category')['amount'].sum().reset_index()
+
+        pie_chart = alt.Chart(category_df).mark_arc(innerRadius=50).encode(
+            theta=alt.Theta(field="amount", type="quantitative"),
+            color=alt.Color(field="category", type="nominal"),
+            tooltip=["category", "amount"]
+        ).properties(width=400, height=400)
+
+        st.altair_chart(pie_chart)
+
+        # Line Chart over Time
+        st.subheader("Spending Over Time")
+        time_df = df_expense.groupby('date')['amount'].sum().reset_index()
+
+        line_chart = alt.Chart(time_df).mark_line(point=True).encode(
+            x=alt.X('date:T', title='Date'),
+            y=alt.Y('amount:Q', title='Amount Spent'),
+            tooltip=["date", "amount"]
+        ).properties(width=700, height=400)
+
+        st.altair_chart(line_chart)
+
+    else:
+        st.write("No expenses recorded yet.")
+
+# About
+elif page == "About":
+    st.header("About FINORA")
+    st.write("""
+    **FINORA** is an advanced Student Budget & Pocket Money Manager app.
+    
+    Features:
+    - Set your Monthly Pocket Money
+    - Add Expenses with Category and Date
+    - View Summary & Graphs
+    - Analyze your Spending trends
+    
+    Stay financially smart with FINORA! 🚀
+    """)
+
+# Footer
+st.markdown("---")
+st.markdown("© 2025 FINORA Student Budget Manager App. All rights reserved.", unsafe_allow_html=True)
